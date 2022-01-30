@@ -27,35 +27,20 @@ namespace JSSimge.Som
 {
   public class CTLightHlaObject : HlaObject
   {
-    #region Declarations
-    // Declare your local object structure here
-        public string tlight_id;
-        public TLState state;
-        public Int64 duration_red;
-        public Int64 duration_green;
-        public Area belong_area;
-    #endregion //Declarations
-    
-    #region Constructor
-    public CTLightHlaObject(HlaObjectClass _type) : base(_type)
-    {
-            // Instantiate local data here
-            tlight_id = "north_down";
-            state = TLState.red;
-            duration_red = 0;
-            duration_green = 0;
-            belong_area = Area.north_down;
-    }
-    // Copy constructor - used in callbacks
-    public CTLightHlaObject(HlaObject _obj) : base(_obj)
-    {
-            // Instantiate local data here
-            tlight_id = "north_down";
-            state = TLState.red;
-            duration_red = 0;
-            duration_green = 0;
-            belong_area = Area.north_down;
-    }
-    #endregion //Constructor
+        #region Declarations
+        public CTLight tlight;
+        #endregion
+
+        #region Constructor
+        public CTLightHlaObject(HlaObjectClass _type) : base(_type)
+        {
+            tlight = new CTLight();
+        }
+        // Copy constructor - used in callbacks
+        public CTLightHlaObject(HlaObject _obj) : base(_obj)
+        {
+            tlight = new CTLight();
+        }
+        #endregion //Constructor
   }
 }

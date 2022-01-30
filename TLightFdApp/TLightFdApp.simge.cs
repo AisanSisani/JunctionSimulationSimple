@@ -41,6 +41,7 @@ namespace JSSimge
     
     #region Event Handlers
     #region Federate Callback Event Handlers
+
     #region Federation Management Callbacks
     // FdAmb_ConnectionLost
     public override void FdAmb_ConnectionLost(object sender, HlaFederationManagementEventArgs data)
@@ -52,14 +53,14 @@ namespace JSSimge
       throw new NotImplementedException("FdAmb_ConnectionLost");
       #endregion //User Code
     }
-    // FdAmb_FederationExecutionsReported
+    // FdAmb_FederationExecutionsReported -> not used
     public override void FdAmb_FederationExecutionsReported(object sender, HlaFederationManagementEventArgs data)
     {
       // Call the base class handler
       base.FdAmb_FederationExecutionsReported(sender, data);
       
       #region User Code
-      throw new NotImplementedException("FdAmb_FederationExecutionsReported");
+      //throw new NotImplementedException("FdAmb_FederationExecutionsReported");
       #endregion //User Code
     }
     // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler
@@ -401,6 +402,7 @@ namespace JSSimge
       #endregion //User Code
     }
     #endregion //Time Management Callbacks
+
     #endregion //Federate Callback Event Handlers
     #endregion //Event Handlers
   }

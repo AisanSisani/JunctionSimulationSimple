@@ -14,71 +14,69 @@ namespace JSSimge
 {
     public class Program
     {
-        static CTLightHlaObject tlight;
+        // Globals
+        static CSimulationManager manager = new CSimulationManager();
+
+        // Local object
+        static CTLight tlight = new CTLight();
         static bool Terminate = false; // exit switch for app
 
         // Communication layer related structures
-        static public CTLightFdApp federate; //Application-specific federate 
+        ///static public CTLightFdApp federate; //Application-specific federate 
        
         // Main Entrance for Application
         static void Main(string[] args)
         {
             // *************************************************
-            // Initialization
+            // Program Initialization
             // *************************************************
             // Instantiation
-            federate = new CTLightFdApp();// Initialize the application-specific federate
-             // Local data
-            tlight = new CTLightHlaObject(federate.Som.TLightOC);// local object
+            ///federate = new CTLightFdApp();// Initialize the application-specific federate
+            // Local data
+            ///tlight = new CTLightHlaObject(federate.Som.TLightOC);// local object
 
-            // UI initialization
+            // UI initialization -> ok
             PrintVersion();
             Thread ConsoleKeyListener = new Thread(new ThreadStart(ProcessKeyboard));
             ConsoleKeyListener.Name = "KeyListener";
 
             // Racon Initialization
             // Getting the information/debugging messages from RACoN
-            federate.StatusMessageChanged += Federate_StatusMessageChanged;
-            federate.LogLevel = LogLevel.ALL;
+            manager.federate.StatusMessageChanged += Federate_StatusMessageChanged;
+            manager.federate.LogLevel = LogLevel.ALL;
 
-            // initialization of station Properties
+            // initialization of light Properties -> not ok
             Console.ForegroundColor = ConsoleColor.Yellow;
             setTLightConfiguration(); // get user input
-            Console.Title = "StationFdApp: " + tlight.tlight_id; // set console title
+            Console.Title = "TLightdApp: " + tlight.tlight_id; // set console title
             printConfiguration();// report to user
             ConsoleKeyListener.Start();// start keyboard event listener
+
+
 
             // *************************************************
             // RTI Initialization
             // *************************************************
             // Initialize the federation execution
-            federate.FederationExecution.FederateName = tlight.tlight_id; // set federate name
-            federate.FederationExecution.Name = "Dardanelles";
-            federate.FederationExecution.FederateType = "TLightFederate";
-            federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
-            federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
-            // Connect
-            federate.Connect(CallbackModel.EVOKED, federate.FederationExecution.ConnectionSettings);
-            // Create federation execution
-            federate.CreateFederationExecution(federate.FederationExecution.Name, federate.FederationExecution.FomModules);
-            // Join federation execution
-            federate.JoinFederationExecution(federate.FederationExecution.FederateName, federate.FederationExecution.FederateType, federate.FederationExecution.Name, federate.FederationExecution.FomModules);
-            // Declare Capability
-            federate.DeclareCapability();
+            bool result = manager.federate.InitializeFederation(manager.federate.FederationExecution);
+
+            // Initialize themes TODO
+            
+            // FM Test
+            manager.federate.ListFederationExecutions();
+
 
             // *************************************************
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
 
-            //initializing the light to red at the beginning
-            tlight.state = TLState.red;
             do
             {
                 // process rti events (callbacks) and tick
-                if (federate.FederateState.HasFlag(FederateStates.JOINED))
-                    federate.Run();
+                if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
+                    manager.federate.Run();
 
-                if(tlight.state == TLState.red)
+                if (tlight.state == TLState.red)
                 {
                     Console.WriteLine("State is red. Sleep for {0} ms.", (int)tlight.duration_red);
                     Thread.Sleep((int)tlight.duration_red);
@@ -92,7 +90,6 @@ namespace JSSimge
                     Console.WriteLine("Change state to red");
                     tlight.state = TLState.red;
                 }
-
             } while (!Terminate);
 
 
@@ -101,14 +98,14 @@ namespace JSSimge
             // *************************************************
             // Finalize user interface
             ConsoleKeyListener.Interrupt();
-            // Finalize Federation Execution
-            bool result2 = federate.FinalizeFederation(federate.FederationExecution, ResignAction.NO_ACTION);
-            
+
+            // Leave and destroy federation execution
+            bool result2 = manager.federate.FinalizeFederation(manager.federate.FederationExecution);
+
             // Dumb trace log
             System.IO.StreamWriter file = new System.IO.StreamWriter(@".\TraceLog.txt");
-            file.WriteLine(federate.TraceLog);
+            file.WriteLine(manager.federate.TraceLog);
             file.Close();
-            //Console.WriteLine(federate.TraceLog.ToString());
 
             // Keep the console window open in debug mode.
             Console.WriteLine("Press any key to exit.");
@@ -133,7 +130,7 @@ namespace JSSimge
         private static void Federate_StatusMessageChanged(object sender, EventArgs e)
         {
             Console.ResetColor();
-            Console.WriteLine((sender as CTLightFdApp).StatusMessage);
+            Console.WriteLine("Racon Message: " + (sender as CTLightFdApp).StatusMessage);
         }
 
         // Set ship configuration
@@ -147,7 +144,7 @@ namespace JSSimge
             Console.Write("Enter TLight ID: ");
             tlight.tlight_id = Console.ReadLine();
 
-            // state
+            // initial state
             tlight.state = TLState.red;
 
             // duration red
@@ -170,6 +167,11 @@ namespace JSSimge
             } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
 
             tlight.belong_area = (Area)(pos);
+
+            // Encapsulate own tlight
+            CTLightHlaObject encapsulatedShipObject = new CTLightHlaObject(manager.federate.Som.TLightOC);
+            encapsulatedShipObject.tlight = tlight;
+            // TODO maybe the light should be saved in the manager
         }
         private static void printConfiguration()
         {

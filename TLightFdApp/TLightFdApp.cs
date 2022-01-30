@@ -38,7 +38,13 @@ namespace JSSimge
       // Create regions manually
     }
     #endregion //Constructor
-    
+
+    // Cut and paste the callbacks that you want to modify from the Generated file (ShipFdApp.simge.cs)
+
+
+
     #endregion //Manually Added Code
-  }
+
+
+    }
 }
