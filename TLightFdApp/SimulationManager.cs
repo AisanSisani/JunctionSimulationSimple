@@ -41,7 +41,7 @@ namespace JSSimge
       federate = new CTLightFdApp(this);
       // Initialize the federation execution
       federate.FederationExecution.Name = "JSFederation";
-      federate.FederationExecution.FederateType = "NewFederate";
+      federate.FederationExecution.FederateType = "TLightFd";
       federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
       // Handle RTI type variation
       initialize();
