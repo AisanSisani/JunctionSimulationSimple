@@ -6,4 +6,8 @@
     <AssemblyName>CarFdApp</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RACoN" Version="0.0.2.4" />
+  </ItemGroup>
+
 </Project>

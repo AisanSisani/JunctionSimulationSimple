@@ -57,13 +57,15 @@ namespace JSSimge
         case RTILibraryType.HLA13_DMSO: case RTILibraryType.HLA13_Portico: case RTILibraryType.HLA13_OpenRti:
                 federate.Som.TLightOC.Name = "objectRoot.TLight";
                 federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
+                //TODO make it relative
                 federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.fed";
-        break;
+                break;
         case RTILibraryType.HLA1516e_Portico: case RTILibraryType.HLA1516e_OpenRti:
                 federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
                 federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
+                //TODO make it relative
                 federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
-        break;
+                break;
       }
     }
     #endregion //Methods
