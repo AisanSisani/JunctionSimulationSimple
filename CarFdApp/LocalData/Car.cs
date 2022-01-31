@@ -35,65 +35,76 @@ namespace JSSimge
             position.Y = -100;
         }
 
-        public void updateDirectionBasedOnArea()
+        public Direction updateDirectionBasedOnArea(Area area)
         {
-            switch (belong_area)
+            Direction newDirection = Direction.east; // dummy
+            switch (area)
             {
                 case Area.north_down:
-                    heading_direction = Direction.south;
+                case Area.south_down:
+                    newDirection = Direction.south;
                     break;
+                case Area.north_up:
                 case Area.south_up:
-                    heading_direction = Direction.north;
+                    newDirection = Direction.north;
                     break;
+                case Area.west_left:
                 case Area.east_left:
-                    heading_direction = Direction.west;
+                    newDirection = Direction.west;
                     break;
+                case Area.east_right:
                 case Area.west_right:
-                    heading_direction = Direction.east;
+                    newDirection = Direction.east;
                     break;
             }
+            return newDirection;
         }
 
-        public void updatePositionBasedOnArea()
+        public Coordinate updatePositionBasedOnArea(Area area)
         {
-            switch (belong_area)
+            Coordinate newPosition;
+            newPosition.X = 0;
+            newPosition.Y = 0;
+
+            switch (area)
             {
                 //initial positions
                 case Area.north_down:
-                    position.X = -1;
-                    position.Y = length_street + 1;
+                    newPosition.X = -1;
+                    newPosition.Y = length_street + 1;
                     break;
                 case Area.south_up:
-                    position.X = 1;
-                    position.Y = -(length_street + 1);
+                    newPosition.X = 1;
+                    newPosition.Y = -(length_street + 1);
                     break;
                 case Area.east_left:
-                    position.X = length_street + 1;
-                    position.Y = 1;
+                    newPosition.X = length_street + 1;
+                    newPosition.Y = 1;
                     break;
                 case Area.west_right:
-                    position.X = -(length_street + 1);
-                    position.Y = -1;
+                    newPosition.X = -(length_street + 1);
+                    newPosition.Y = -1;
                     break;
 
                 //after junction initial positions
                 case Area.north_up:
-                    position.X = 1;
-                    position.Y = 1;
+                    newPosition.X = 1;
+                    newPosition.Y = 1;
                     break;
                 case Area.south_down:
-                    position.X = -1;
-                    position.Y = -1;
+                    newPosition.X = -1;
+                    newPosition.Y = -1;
                     break;
                 case Area.east_right:
-                    position.X = 1;
-                    position.Y = -1;
+                    newPosition.X = 1;
+                    newPosition.Y = -1;
                     break;
                 case Area.west_left:
-                    position.X = -1;
-                    position.Y = +1;
+                    newPosition.X = -1;
+                    newPosition.Y = +1;
                     break;
             }
+            return newPosition;
         }
 
         //method for checking if the initial positions are empty or not TODO
@@ -168,17 +179,19 @@ namespace JSSimge
             if (Exit)
             {
                 position = newPostion;
+                //TODO send the new position to the RTI
                 return;
             }
 
-            //if position is not out of map
-            //check if the new position is crossing the juction and correct the new position
+               
+
+            //check if the new position is crossing  or at the juction and correct the new position to junction
             Boolean cross = false;
             switch (belong_area)
             {
                 // before junction
                 case Area.north_down:
-                    if (newPostion.Y < 1)
+                    if (newPostion.Y <= 1)
                     {
                         cross = true;
                         newPostion.Y = 1;
@@ -186,21 +199,21 @@ namespace JSSimge
 
                     break;
                 case Area.south_up:
-                    if (newPostion.Y > -1)
+                    if (newPostion.Y >= -1)
                     {
                         cross = true;
                         newPostion.Y = -1;
                     }
                     break;
                 case Area.west_right:
-                    if (newPostion.X > -1) 
+                    if (newPostion.X >= -1) 
                     {
                         cross = true;
                         newPostion.X = -1;
                     }
                     break;
                 case Area.east_left:
-                    if (newPostion.X < 1) 
+                    if (newPostion.X <= 1) 
                     {
                         cross = true;
                         newPostion.X = 1;
@@ -209,48 +222,38 @@ namespace JSSimge
 
             }
 
-            //check if the new position is 
-
             if (cross)
             {
-                Area newArea = chooseNextArea();
-                //TODO: check the light for the area that it is in
-                // if the light is red
-                position = newPostion;
-                return;
+                TLState light = TLState.red;
+                //TODO check the light
 
-                //if light is green
+                if(light == TLState.red)
+                {
+                    position = newPostion;
+                    // send position to the RTI
+                    return;
+                }
+                else
+                {
+                    Area newArea = chooseNextArea();
+                    newPostion = updatePositionBasedOnArea(newArea); 
 
+                }
+                
             }
 
-
-
-            switch (belong_area)
+            // TODO check if the new position empty
+            Boolean empty = false;
+            if (empty)
             {
-                // after junction
-                case Area.east_right:
-
-                    break;
-                case Area.north_up:
-                    break;
-                case Area.south_down:
-                    break;
-                case Area.west_left:
-                    break;
-
-                // before junction
-                case Area.north_down:
-                    break;
-                case Area.south_up:
-                    break;
-                case Area.west_right:
-                    break;
-                case Area.east_left:
-                    break;
-
+                position = newPostion;
+                // TODO send the new position to the RTI
+                return;
             }
-
-
+            else
+            {
+                return;
+            }
         }
 
         public Area chooseNextArea()
@@ -275,7 +278,6 @@ namespace JSSimge
                 case Area.east_left:
                     list = new List<Area>() { Area.west_left, Area.south_down, Area.north_up }; 
                     break;
-
             }
 
             newArea = list[index];

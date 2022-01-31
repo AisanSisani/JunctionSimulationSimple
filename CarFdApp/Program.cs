@@ -78,7 +78,7 @@ namespace JSSimge
                     manager.federate.Run();
 
                 // Move our local ship
-                car.move(GetTimeStep());
+                car.Move(GetTimeStep());
 
             } while (!Terminate && !car.Exit);
 
@@ -179,11 +179,11 @@ namespace JSSimge
 
             //public Direction heading_direction;
             //based on belong area
-            car.updateDirectionBasedOnArea();
+            car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
 
             //public Coordinate position;
             //based on belong area
-            car.updatePositionBasedOnArea();
+            car.position = car.updatePositionBasedOnArea(car.belong_area);
 
             //public Pace speed;
             pos = 0;
