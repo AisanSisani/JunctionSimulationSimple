@@ -26,11 +26,11 @@ namespace JSSimge
 {
   public partial class CCarFdApp : Racon.CGenericFederate
   {
-    #region Declarations
+    #region Declarations -> ok
     public JSSimge.Som.FederateSom Som;
     #endregion //Declarations
     
-    #region Constructor
+    #region Constructor -> ok
     public CCarFdApp() : base(RTILibraryType.HLA1516e_OpenRti)
     {
       // Create and Attach Som to federate
@@ -42,98 +42,109 @@ namespace JSSimge
     #region Event Handlers
     #region Federate Callback Event Handlers
     #region Federation Management Callbacks
-    // FdAmb_ConnectionLost
-    public override void FdAmb_ConnectionLost(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_ConnectionLost(sender, data);
+        
+
+
+        // FdAmb_FederationExecutionsReported -> not used
+        public override void FdAmb_FederationExecutionsReported(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_FederationExecutionsReported(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_ConnectionLost");
-      #endregion //User Code
-    }
-    // FdAmb_FederationExecutionsReported -> not used
-    public override void FdAmb_FederationExecutionsReported(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_FederationExecutionsReported(sender, data);
+          #region User Code
+          //throw new NotImplementedException("FdAmb_FederationExecutionsReported");
+          #endregion //User Code
+        }
+        // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler
+        public override void FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(sender, data);
       
-      #region User Code
-      //throw new NotImplementedException("FdAmb_FederationExecutionsReported");
-      #endregion //User Code
-    }
-    // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler
-    public override void FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(sender, data);
+          #region User Code
+          throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationConfirmedHandler");
+          #endregion //User Code
+        }
+        // FdAmb_OnSynchronizationPointRegistrationFailedHandler
+        public override void FdAmb_OnSynchronizationPointRegistrationFailedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_OnSynchronizationPointRegistrationFailedHandler(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationConfirmedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_OnSynchronizationPointRegistrationFailedHandler
-    public override void FdAmb_OnSynchronizationPointRegistrationFailedHandler(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_OnSynchronizationPointRegistrationFailedHandler(sender, data);
+          #region User Code
+          throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationFailedHandler");
+          #endregion //User Code
+        }
+        // FdAmb_SynchronizationPointAnnounced
+        public override void FdAmb_SynchronizationPointAnnounced(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_SynchronizationPointAnnounced(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationFailedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_SynchronizationPointAnnounced
-    public override void FdAmb_SynchronizationPointAnnounced(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_SynchronizationPointAnnounced(sender, data);
+          #region User Code
+          throw new NotImplementedException("FdAmb_SynchronizationPointAnnounced");
+          #endregion //User Code
+        }
+        // FdAmb_FederationSynchronized
+        public override void FdAmb_FederationSynchronized(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_FederationSynchronized(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_SynchronizationPointAnnounced");
-      #endregion //User Code
-    }
-    // FdAmb_FederationSynchronized
-    public override void FdAmb_FederationSynchronized(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_FederationSynchronized(sender, data);
+          #region User Code
+          throw new NotImplementedException("FdAmb_FederationSynchronized");
+          #endregion //User Code
+        }
+    
+    
+        // FdAmb_FederationSaveStatusResponse
+        public override void FdAmb_FederationSaveStatusResponse(object sender, HlaFederationManagementEventArgs data)
+        {
+          // Call the base class handler
+          base.FdAmb_FederationSaveStatusResponse(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_FederationSynchronized");
-      #endregion //User Code
-    }
-    // FdAmb_InitiateFederateSaveHandler
-    public override void FdAmb_InitiateFederateSaveHandler(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_InitiateFederateSaveHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_InitiateFederateSaveHandler");
-      #endregion //User Code
-    }
-    // FdAmb_FederationSaved
-    public override void FdAmb_FederationSaved(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_FederationSaved(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_FederationSaved");
-      #endregion //User Code
-    }
-    // FdAmb_FederationSaveStatusResponse
-    public override void FdAmb_FederationSaveStatusResponse(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_FederationSaveStatusResponse(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_FederationSaveStatusResponse");
-      #endregion //User Code
-    }
-    // FdAmb_ConfirmFederationRestorationRequestHandler
-    public override void FdAmb_ConfirmFederationRestorationRequestHandler(object sender, HlaFederationManagementEventArgs data)
+          #region User Code
+          throw new NotImplementedException("FdAmb_FederationSaveStatusResponse");
+          #endregion //User Code
+        }
+
+        // FdAmb_FederationRestoreStatusResponse
+        public override void FdAmb_FederationRestoreStatusResponse(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_FederationRestoreStatusResponse(sender, data);
+
+            #region User Code
+            throw new NotImplementedException("FdAmb_FederationRestoreStatusResponse");
+            #endregion //User Code
+        }
+
+
+        //----------------------------------------------------------------------------------------------------------------------------
+        // FdAmb_InitiateFederateSaveHandler -> same
+        public override void FdAmb_InitiateFederateSaveHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_InitiateFederateSaveHandler(sender, data);
+
+            #region User Code
+            throw new NotImplementedException("FdAmb_InitiateFederateSaveHandler");
+            #endregion //User Code
+        }
+
+        // FdAmb_FederationSaved -> same
+        public override void FdAmb_FederationSaved(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_FederationSaved(sender, data);
+
+            #region User Code
+            throw new NotImplementedException("FdAmb_FederationSaved");
+            #endregion //User Code
+        }
+
+        // FdAmb_ConfirmFederationRestorationRequestHandler -> same
+        public override void FdAmb_ConfirmFederationRestorationRequestHandler(object sender, HlaFederationManagementEventArgs data)
     {
       // Call the base class handler
       base.FdAmb_ConfirmFederationRestorationRequestHandler(sender, data);
@@ -142,8 +153,9 @@ namespace JSSimge
       throw new NotImplementedException("FdAmb_ConfirmFederationRestorationRequestHandler");
       #endregion //User Code
     }
-    // FdAmb_FederationRestoreBegun
-    public override void FdAmb_FederationRestoreBegun(object sender, HlaFederationManagementEventArgs data)
+    
+        // FdAmb_FederationRestoreBegun -> same
+        public override void FdAmb_FederationRestoreBegun(object sender, HlaFederationManagementEventArgs data)
     {
       // Call the base class handler
       base.FdAmb_FederationRestoreBegun(sender, data);
@@ -152,8 +164,9 @@ namespace JSSimge
       throw new NotImplementedException("FdAmb_FederationRestoreBegun");
       #endregion //User Code
     }
-    // FdAmb_InitiateFederateRestoreHandler
-    public override void FdAmb_InitiateFederateRestoreHandler(object sender, HlaFederationManagementEventArgs data)
+    
+        // FdAmb_InitiateFederateRestoreHandler -> same
+        public override void FdAmb_InitiateFederateRestoreHandler(object sender, HlaFederationManagementEventArgs data)
     {
       // Call the base class handler
       base.FdAmb_InitiateFederateRestoreHandler(sender, data);
@@ -162,8 +175,9 @@ namespace JSSimge
       throw new NotImplementedException("FdAmb_InitiateFederateRestoreHandler");
       #endregion //User Code
     }
-    // FdAmb_FederationRestored
-    public override void FdAmb_FederationRestored(object sender, HlaFederationManagementEventArgs data)
+    
+        // FdAmb_FederationRestored -> same
+        public override void FdAmb_FederationRestored(object sender, HlaFederationManagementEventArgs data)
     {
       // Call the base class handler
       base.FdAmb_FederationRestored(sender, data);
@@ -172,29 +186,23 @@ namespace JSSimge
       throw new NotImplementedException("FdAmb_FederationRestored");
       #endregion //User Code
     }
-    // FdAmb_FederationRestoreStatusResponse
-    public override void FdAmb_FederationRestoreStatusResponse(object sender, HlaFederationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_FederationRestoreStatusResponse(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_FederationRestoreStatusResponse");
-      #endregion //User Code
-    }
-    #endregion //Federation Management Callbacks
-    #region Declaration Management Callbacks
-    // FdAmb_StartRegistrationForObjectClassAdvisedHandler
-    public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
-      
-      #region User Code
-       //TODO
-      // throw new NotImplementedException("FdAmb_StartRegistrationForObjectClassAdvisedHandler");
-      #endregion //User Code
-    }
+
+        // FdAmb_ConnectionLost -> not used
+        public override void FdAmb_ConnectionLost(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_ConnectionLost(sender, data);
+
+            #region User Code
+            throw new NotImplementedException("FdAmb_ConnectionLost");
+            #endregion //User Code
+        }
+
+        #endregion //Federation Management Callbacks
+
+
+        #region Declaration Management Callbacks
+        
     // FdAmb_StopRegistrationForObjectClassAdvisedHandler
     public override void FdAmb_StopRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
     {
@@ -227,36 +235,8 @@ namespace JSSimge
     }
     #endregion //Declaration Management Callbacks
     #region Object Management Callbacks
-    // FdAmb_ObjectDiscoveredHandler
-    public override void FdAmb_ObjectDiscoveredHandler(object sender, HlaObjectEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_ObjectDiscoveredHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_ObjectDiscoveredHandler");
-      #endregion //User Code
-    }
-    // FdAmb_ObjectRemovedHandler
-    public override void FdAmb_ObjectRemovedHandler(object sender, HlaObjectEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_ObjectRemovedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_ObjectRemovedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_AttributeValueUpdateRequestedHandler
-    public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_AttributeValueUpdateRequestedHandler");
-      #endregion //User Code
-    }
+    
+    
     // FdAmb_ObjectAttributesReflectedHandler
     public override void FdAmb_ObjectAttributesReflectedHandler(object sender, HlaObjectEventArgs data)
     {

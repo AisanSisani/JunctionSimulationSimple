@@ -20,6 +20,7 @@ namespace JSSimge
         // Local object
         static CCar car = new CCar();
         static bool Terminate = false; // exit switch for app
+        static double old_time = DateTime.Now.TimeOfDay.TotalSeconds; //TIMER
 
         // Communication layer related structures
         ///static public CTLightFdApp federate; //Application-specific federate 
@@ -30,25 +31,22 @@ namespace JSSimge
             // *************************************************
             // Program Initialization
             // *************************************************
-            // Instantiation
-            ///federate = new CTLightFdApp();// Initialize the application-specific federate
-            // Local data
-            ///tlight = new CTLightHlaObject(federate.Som.TLightOC);// local object
 
             // UI initialization -> ok
             PrintVersion();
             Thread ConsoleKeyListener = new Thread(new ThreadStart(ProcessKeyboard));
             ConsoleKeyListener.Name = "KeyListener";
 
-            // Racon Initialization
+            // Racon Initialization -> ok
             // Getting the information/debugging messages from RACoN
             manager.federate.StatusMessageChanged += Federate_StatusMessageChanged;
             manager.federate.LogLevel = LogLevel.ALL;
 
-            // initialization of light Properties -> not ok
+            // initialization of light Properties -> ok
             Console.ForegroundColor = ConsoleColor.Yellow;
             setCarConfiguration(); // get user input
             Console.Title = "CarFdApp: " + car.car_id; // set console title
+            manager.federate.FederationExecution.FederateName = car.car_id; // set feedrate name
             printConfiguration();// report to user
             ConsoleKeyListener.Start();// start keyboard event listener
 
@@ -61,6 +59,9 @@ namespace JSSimge
             bool result = manager.federate.InitializeFederation(manager.federate.FederationExecution);
 
             // Initialize themes TODO
+            // TM Initialization
+            manager.federate.EnableAsynchronousDelivery();
+            manager.federate.EnableTimeConstrained();
 
             // FM Test
             manager.federate.ListFederationExecutions();
@@ -69,15 +70,29 @@ namespace JSSimge
             // *************************************************
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
-
+            old_time = DateTime.Now.TimeOfDay.TotalSeconds;
             do
             {
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
 
-                
-            } while (!Terminate);
+                // Move our local ship
+                car.move(GetTimeStep());
+
+            } while (!Terminate && !car.Exit);
+
+            // TM Tests
+            manager.federate.DisableAsynchronousDelivery();
+            manager.federate.DisableTimeConstrained();
+            manager.federate.QueryLogicalTime();
+            manager.federate.QueryLookahead(); // generates exception as this federate is TC.
+            double galt;
+            bool res = manager.federate.queryGALT(out galt);
+            bool res2 = manager.federate.queryGALT();
+            double lits;
+            bool res4 = manager.federate.QueryLITS(out lits);
+            bool res3 = manager.federate.QueryLITS();
 
 
             // *************************************************
@@ -85,6 +100,13 @@ namespace JSSimge
             // *************************************************
             // Finalize user interface
             ConsoleKeyListener.Interrupt();
+
+            
+
+            // Finalize Federation Execution
+            // Remove objects
+            manager.timer.Stop(); // stop reporting the ship position
+            manager.federate.DeleteObjectInstance(manager.CarObjects[0]); //destroy the car you registred
 
             // Leave and destroy federation execution
             bool result2 = manager.federate.FinalizeFederation(manager.federate.FederationExecution);
@@ -98,6 +120,20 @@ namespace JSSimge
             Console.WriteLine("Press any key to exit.");
             Console.ReadKey();
         }
+
+        // Get time step
+        private static double GetTimeStep()
+        {
+            // Calculate simulation step time
+            double curr_time, dt;
+
+            curr_time = DateTime.Now.TimeOfDay.TotalSeconds;
+            dt = curr_time - old_time;
+            old_time = curr_time;
+
+            return dt;
+        }
+
         // Process KB events
         private static void ProcessKeyboard()
         {
@@ -160,9 +196,10 @@ namespace JSSimge
             car.speed = (Pace)(pos);
 
             // Encapsulate own tlight
-            CCarHlaObject encapsulatedShipObject = new CCarHlaObject(manager.federate.Som.TLightOC);
-            encapsulatedShipObject.car = car;
-            // TODO maybe the car should be saved in the manager
+            CCarHlaObject encapsulatedCarObject = new CCarHlaObject(manager.federate.Som.TLightOC);
+            encapsulatedCarObject.car = car;
+            // add the car created to the simulation manager it will be index 0
+            manager.CarObjects.Add(encapsulatedCarObject);
         }
         private static void printConfiguration()
         {
@@ -174,6 +211,25 @@ namespace JSSimge
             Console.WriteLine("Speed: {0}", car.speed);
             Console.WriteLine("Position: ({0}, {1})", car.position.X, car.position.Y);
         }
+
+        // Print status TODO: fill them with more data, also check where it is called
+        private static void printStatus()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("*************** Status ***************");
+            Console.WriteLine("Cars:");
+            foreach (var item in manager.CarObjects)
+            {
+                Console.WriteLine($"{item.car.car_id}: {item.car.belong_area}, ({item.car.position.X}, {item.car.position.Y})");
+            }
+            Console.WriteLine("\nShips:");
+            foreach (var item in manager.TLightObjects)
+            {
+                Console.WriteLine($"{item.tlight.tlight_id}: {item.tlight.belong_area}");
+            }
+            Console.WriteLine("**************************************");
+        }
+
 
         // Print version
         private static void PrintVersion()
