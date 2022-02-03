@@ -185,26 +185,7 @@ namespace JSSimge
     }
     #endregion //Federation Management Callbacks
     #region Declaration Management Callbacks
-    // FdAmb_StartRegistrationForObjectClassAdvisedHandler
-    public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_StartRegistrationForObjectClassAdvisedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_StopRegistrationForObjectClassAdvisedHandler
-    public override void FdAmb_StopRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_StopRegistrationForObjectClassAdvisedHandler");
-      #endregion //User Code
-    }
+    
     // FdAmb_TurnInteractionsOffAdvisedHandler
     public override void FdAmb_TurnInteractionsOffAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
     {
@@ -247,16 +228,7 @@ namespace JSSimge
       //throw new NotImplementedException("FdAmb_ObjectRemovedHandler");
       #endregion //User Code
     }
-    // FdAmb_AttributeValueUpdateRequestedHandler
-    public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_AttributeValueUpdateRequestedHandler");
-      #endregion //User Code
-    }
+    
     // FdAmb_ObjectAttributesReflectedHandler
     public override void FdAmb_ObjectAttributesReflectedHandler(object sender, HlaObjectEventArgs data)
     {
@@ -360,47 +332,7 @@ namespace JSSimge
       #endregion //User Code
     }
     #endregion //Ownership Management Callbacks
-    #region Time Management Callbacks
-    // FdAmb_TimeRegulationEnabled
-    public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeRegulationEnabled(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_TimeRegulationEnabled");
-      #endregion //User Code
-    }
-    // FdAmb_TimeConstrainedEnabled
-    public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeConstrainedEnabled(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_TimeConstrainedEnabled");
-      #endregion //User Code
-    }
-    // FdAmb_TimeAdvanceGrant
-    public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeAdvanceGrant(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_TimeAdvanceGrant");
-      #endregion //User Code
-    }
-    // FdAmb_RequestRetraction
-    public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_RequestRetraction(sender, data);
-      
-      #region User Code
-      //throw new NotImplementedException("FdAmb_RequestRetraction");
-      #endregion //User Code
-    }
+    #region Time Management Callbackk
     #endregion //Time Management Callbacks
 
     #endregion //Federate Callback Event Handlers

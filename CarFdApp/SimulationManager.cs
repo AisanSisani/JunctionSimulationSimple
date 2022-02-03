@@ -85,7 +85,7 @@ namespace JSSimge
             }
         }
 
-        // Update Ship Position TODO: create the timer and all the shit TIMER
+        // Update Car Position TODO: create the timer and all the shit TIMER
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
             // Update all the attributes of the car

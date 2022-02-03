@@ -171,7 +171,8 @@ namespace JSSimge
             // Encapsulate own tlight
             CTLightHlaObject encapsulatedShipObject = new CTLightHlaObject(manager.federate.Som.TLightOC);
             encapsulatedShipObject.tlight = tlight;
-            // TODO maybe the light should be saved in the manager
+            //the light should be saved in the manager
+            manager.TLightObject = encapsulatedShipObject;
         }
         private static void printConfiguration()
         {

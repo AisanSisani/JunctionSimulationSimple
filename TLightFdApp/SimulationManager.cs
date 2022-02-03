@@ -16,6 +16,8 @@
 // System
 using System;
 using System.Collections.Generic; // for List
+using System.ComponentModel;
+using System.Timers;
 // Racon
 using Racon;
 using Racon.RtiLayer;
@@ -31,20 +33,21 @@ namespace JSSimge
     public CTLightFdApp federate; //Application-specific federate 
     // Local data structures
     // user-defined data structures are declared here
-    // no local data
+    public CTLightHlaObject TLightObject;
+    public System.Timers.Timer timer = new System.Timers.Timer(5000); // Timer to report the state periodically, TIMER
     #endregion //Declarations
-    
+
     #region Constructor
     public CSimulationManager()
     {
-      // Initialize the application-specific federate
-      federate = new CTLightFdApp(this);
-      // Initialize the federation execution
-      federate.FederationExecution.Name = "JSFederation";
-      federate.FederationExecution.FederateType = "TLightFd";
-      federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
-      // Handle RTI type variation
-      initialize();
+        // Initialize the application-specific federate
+        federate = new CTLightFdApp(this);
+        // Initialize the federation execution
+        federate.FederationExecution.Name = "JSFederation";
+        federate.FederationExecution.FederateType = "TLightFd";
+        federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
+        // Handle RTI type variation
+        initialize();
     }
     #endregion //Constructor
     
@@ -67,6 +70,23 @@ namespace JSSimge
                 federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
                 break;
       }
+    }
+
+    // Update Car Position TODO: create the timer and all the shit TIMER
+    private void TimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        // Update all the attributes of the car
+        federate.UpdateAll(TLightObject);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"Timer Elapsed - {TLightObject.tlight.state})");
+
+        //// report all ships
+        //foreach (var item in ShipObjects)
+        //{
+        //  Console.WriteLine($"{item.Ship.Callsign}: ({item.Ship.Position.X}, {item.Ship.Position.Y}), {item.Ship.Heading}, {item.Ship.Speed}");
+        //}
+
+        // Force a garbage collection to occur.
     }
     #endregion //Methods
   }
