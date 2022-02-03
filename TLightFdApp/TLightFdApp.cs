@@ -51,6 +51,8 @@ namespace JSSimge
             base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
 
             #region User Code
+            Report("FdAmb_StartRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
+
             // Check that this is for the CarOC
             if (data.ObjectClassHandle == Som.TLightOC.Handle)
                 RegisterObject(manager.TLightObject);
@@ -85,6 +87,8 @@ namespace JSSimge
             base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
 
             #region User Code
+            Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
+
             manager.timer.Stop(); // move this to turn off attribute update callback
             #endregion //User Code
         }
@@ -101,6 +105,8 @@ namespace JSSimge
             base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
 
             #region User Code
+            Report("FdAmb_AttributeValueUpdateRequestedHandler", ConsoleColor.Blue);
+
             // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
             if (data.ObjectInstance.Handle == manager.TLightObject.Handle)
             {
@@ -133,6 +139,8 @@ namespace JSSimge
             base.FdAmb_TimeRegulationEnabled(sender, data);
 
             #region User Code
+            Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
+
             Time = data.Time; //  Current logical time of the joined federate set by RTI
             Report("Logical time set by RTI TR: " + Time);
             #endregion //User Code
@@ -145,6 +153,8 @@ namespace JSSimge
             base.FdAmb_TimeConstrainedEnabled(sender, data);
 
             #region User Code
+            Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
+
             Time = data.Time; //  Current logical time of the joined federate set by RTI
             Report("Logical time set by RTI TC: " + Time);
             #endregion //User Code
@@ -157,6 +167,8 @@ namespace JSSimge
             base.FdAmb_TimeAdvanceGrant(sender, data);
 
             #region User Code
+            Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
+
             Time = data.Time; //  Current logical time of the joined federate set by RTI
             Report("Logical time set by RTI: " + Time);
             #endregion //User Code
@@ -168,6 +180,8 @@ namespace JSSimge
             base.FdAmb_RequestRetraction(sender, data);
 
             #region User Code
+            Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
+
             throw new NotImplementedException("FdAmb_RequestRetraction");
             #endregion //User Code
         }
@@ -178,6 +192,8 @@ namespace JSSimge
         public void UpdateState(CTLightHlaObject tlight)
         {
             // Add Values
+            Report("UpdateState", ConsoleColor.Blue);
+
             tlight.AddAttributeValue<TLState>(Som.TLightOC.state, tlight.tlight.state);
             UpdateAttributeValues(tlight);
         }
@@ -185,6 +201,8 @@ namespace JSSimge
         // Update attribute values
         public void UpdateAll(CTLightHlaObject tlight)
         {
+            Report("UpdateAll", ConsoleColor.Blue);
+
             // Add Values
             tlight.AddAttributeValue(Som.TLightOC.tlight_id, tlight.tlight.tlight_id);
             tlight.AddAttributeValue(Som.TLightOC.belong_area, (uint)tlight.tlight.belong_area);
@@ -198,6 +216,13 @@ namespace JSSimge
         private void Report(string txt)
         {
             Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(txt);
+        }
+
+        // report
+        private void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
             Console.WriteLine(txt);
         }
 

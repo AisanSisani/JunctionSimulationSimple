@@ -75,6 +75,7 @@ namespace JSSimge
     // Update Car Position TODO: create the timer and all the shit TIMER
     private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
+            Report("TimerElapsed", ConsoleColor.Blue);
         // Update all the attributes of the car
         federate.UpdateAll(TLightObject);
         Console.ForegroundColor = ConsoleColor.White;
@@ -86,8 +87,16 @@ namespace JSSimge
         //  Console.WriteLine($"{item.Ship.Callsign}: ({item.Ship.Position.X}, {item.Ship.Position.Y}), {item.Ship.Heading}, {item.Ship.Speed}");
         //}
 
-        // Force a garbage collection to occur.
+        // Force a garbage collection to occur. TODO
     }
-    #endregion //Methods
-  }
+
+        // report
+        private void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(txt);
+        }
+
+        #endregion //Methods
+    }
 }
