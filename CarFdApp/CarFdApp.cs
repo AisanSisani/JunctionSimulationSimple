@@ -33,115 +33,200 @@ namespace JSSimge
         private object thisLock = new object(); //used when removing object
 
         #region Constructor
-        public CCarFdApp(CSimulationManager parent) : this()
-        {
-          manager = parent; // Set simulation manager
-          // Create regions manually
-        }
+            public CCarFdApp(CSimulationManager parent) : this()
+            {
+              manager = parent; // Set simulation manager
+              // Create regions manually
+            }
         #endregion //Constructor
 
-        // Cut and paste the callbacks that you want to modify from the Generated file (ShipFdApp.simge.cs)
+        // (TODO if you want add the synchronization handlers in this region)
         #region Federation Management Callbacks
         #endregion
 
         #region Declaration Management Callbacks
-        // FdAmb_StartRegistrationForObjectClassAdvisedHandler
-        public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
+            // registering the car you have created
+            public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
 
-            #region User Code
-            // Check that this is for the ShipOC
-            if (data.ObjectClassHandle == Som.CarOC.Handle)
-                RegisterObject(manager.CarObjects[0]);
+                #region User Code
+                // Check that this is for the CarOC
+                if (data.ObjectClassHandle == Som.CarOC.Handle)
+                    RegisterObject(manager.CarObjects[0]);
 
-            //TODO the timer starts here
-            #endregion //User Code
-        }
-        #endregion
+                //TODO the timer starts here
+                manager.timer.Start(); // move this to turn on attribute update callback
+                #endregion //User Code
+            }
+
+            private void RegisterObject(HlaObject obj)
+            {
+                RegisterHlaObject(obj);
+
+                //TODO read what are these
+                //// DDM - register object with regions
+                //// Create a list of attribute set and region set pairs
+                //AttributeHandleSetRegionHandleSetPairVector pairs = new AttributeHandleSetRegionHandleSetPairVector();
+                //// Construct the region set
+                //List<HlaRegion> regions = new List<HlaRegion>();
+                //regions.Add(aor1);
+                //// Populate the pairs. Here we use all the attributes of the object
+                //pairs.Pairs.Add(new KeyValuePair<List<HlaAttribute>, List<HlaRegion>>(obj.Attributes, regions));
+                //// register object attributes with related regions
+                //RegisterHlaObject(obj, pairs);
+                //associateRegionsForUpdates(obj, pairs);
+            }
+
+            // Stop Registration
+            public override void FdAmb_StopRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
+
+                #region User Code
+                manager.timer.Stop(); // move this to turn off attribute update callback
+                #endregion //User Code
+            }
+        #endregion // Declaration Management Callbacks
 
         #region Object Management Callbacks
-        // FdAmb_ObjectDiscoveredHandler
-        public override void FdAmb_ObjectDiscoveredHandler(object sender, HlaObjectEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_ObjectDiscoveredHandler(sender, data);
-
-            #region User Code
-            // if the object is a car
-            if (data.ClassHandle == Som.CarOC.Handle)
+            // RTI has discovered objects you may like
+            public override void FdAmb_ObjectDiscoveredHandler(object sender, HlaObjectEventArgs data)
             {
-                // TODO: just save the cars that are in the same region (maybe)
+                // Call the base class handler
+                base.FdAmb_ObjectDiscoveredHandler(sender, data);
 
-                // Create and add a new car to the list
-                CCarHlaObject newCar = new CCarHlaObject(data.ObjectInstance);
-                newCar.Type = Som.CarOC;// if user forgets to set type of the object, then an exception generated
-                manager.CarObjects.Add(newCar);
+                #region User Code
+                // if the object is a car
+                if (data.ClassHandle == Som.CarOC.Handle)
+                {
+                    // TODO: just save the cars that are in the same region (maybe)
 
-                // (3) Request Update Values for specific attributes only (in here all)
-                List<HlaAttribute> attributes = new List<HlaAttribute>();
-                attributes.Add(Som.CarOC.car_id);
-                attributes.Add(Som.CarOC.belong_area);
-                attributes.Add(Som.CarOC.heading_direction);
-                attributes.Add(Som.CarOC.speed);
-                attributes.Add(Som.CarOC.position);
-                RequestAttributeValueUpdate(newCar, attributes);
+                    // Create and add a new car to the list
+                    CCarHlaObject newCar = new CCarHlaObject(data.ObjectInstance);
+                    newCar.Type = Som.CarOC;// if user forgets to set type of the object, then an exception generated
+                    manager.CarObjects.Add(newCar);
+
+                    // (3) Request Update Values for specific attributes only (in here all)
+                    List<HlaAttribute> attributes = new List<HlaAttribute>();
+                    attributes.Add(Som.CarOC.car_id);
+                    attributes.Add(Som.CarOC.belong_area);
+                    attributes.Add(Som.CarOC.heading_direction);
+                    attributes.Add(Som.CarOC.speed);
+                    attributes.Add(Som.CarOC.position);
+                    RequestAttributeValueUpdate(newCar, attributes);
+                }
+                // if the obejct is a tlight
+                else if (data.ClassHandle == Som.TLightOC.Handle)
+                {
+                    // Create and add a new tlight to the list
+                    CTLightHlaObject newTLight = new CTLightHlaObject(data.ObjectInstance);
+                    newTLight.Type = Som.TLightOC;// if user forgets to set type of the object, then an exception generated
+                    manager.TLightObjects.Add(newTLight);
+
+                    // (3) Request Update Values for specific attributes only (in here all)
+                    List<HlaAttribute> attributes = new List<HlaAttribute>();
+                    attributes.Add(Som.TLightOC.tlight_id);
+                    attributes.Add(Som.TLightOC.state);
+                    attributes.Add(Som.TLightOC.duration_green);
+                    attributes.Add(Som.TLightOC.duration_red);
+                    attributes.Add(Som.TLightOC.belong_area);
+                    RequestAttributeValueUpdate(newTLight, attributes);
+
+                }
+                #endregion //User Code
             }
-            // if the obejct is a tlight
-            else if (data.ClassHandle == Som.TLightOC.Handle)
+
+            // other federates asks you to update you values
+            public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
             {
-                // Create and add a new tlight to the list
-                CTLightHlaObject newTLight = new CTLightHlaObject(data.ObjectInstance);
-                newTLight.Type = Som.TLightOC;// if user forgets to set type of the object, then an exception generated
-                manager.TLightObjects.Add(newTLight);
+                // Call the base class handler
+                base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
 
-                // (3) Request Update Values for specific attributes only (in here all)
-                List<HlaAttribute> attributes = new List<HlaAttribute>();
-                attributes.Add(Som.TLightOC.tlight_id);
-                attributes.Add(Som.TLightOC.state);
-                attributes.Add(Som.TLightOC.duration_green);
-                attributes.Add(Som.TLightOC.duration_red);
-                attributes.Add(Som.TLightOC.belong_area);
-                RequestAttributeValueUpdate(newTLight, attributes);
+                #region User Code
+                // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
+                if (data.ObjectInstance.Handle == manager.CarObjects[0].Handle)
+                {
+                    // We can further try to figure out the attributes for which update is requested.
+                    //foreach (var item in data.ObjectInstance.Attributes)
+                    //{
+                    //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
+                    //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
+                    //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
+                    //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
+                    //}
 
+                    // We can update all attributes if we dont want to check every attribute.
+                    UpdateAll(manager.CarObjects[0]);
+                    //UpdateName(manager.Ships[0]);
+                    //UpdatePosition(manager.Ships[0]);
+                    //UpdateHeading(manager.Ships[0]);
+                    //UpdateSpeed(manager.Ships[0]);
+                }
+                #endregion //User Code
             }
-            #endregion //User Code
-        }
 
-        // FdAmb_AttributeValueUpdateRequestedHandler
-        public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
-
-            #region User Code
-            // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
-            if (data.ObjectInstance.Handle == manager.CarObjects[0].Handle)
+            // RTI has sent you some updates regarding other objects you may like
+            public override void FdAmb_ObjectAttributesReflectedHandler(object sender, HlaObjectEventArgs data)
             {
-                // We can further try to figure out the attributes for which update is requested.
-                //foreach (var item in data.ObjectInstance.Attributes)
-                //{
-                //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
-                //}
+                // Call the base class handler
+                base.FdAmb_ObjectAttributesReflectedHandler(sender, data);
 
-                // We can update all attributes if we dont want to check every attribute.
-                UpdateAll(manager.CarObjects[0]);
-                //UpdateName(manager.Ships[0]);
-                //UpdatePosition(manager.Ships[0]);
-                //UpdateHeading(manager.Ships[0]);
-                //UpdateSpeed(manager.Ships[0]);
+                #region User Code
+                foreach (var item in manager.CarObjects)
+                {
+                    if (data.ObjectInstance.Handle == item.Handle)
+                    {
+
+                        if (data.IsValueUpdated(Som.CarOC.car_id))
+                            item.car.car_id = data.GetAttributeValue<string>(Som.CarOC.car_id);
+                        
+                        if (data.IsValueUpdated(Som.CarOC.belong_area))
+                            item.car.belong_area = (Area)data.GetAttributeValue<uint>(Som.CarOC.belong_area);
+                        
+                        if (data.IsValueUpdated(Som.CarOC.heading_direction))
+                            item.car.heading_direction = (Direction)data.GetAttributeValue<uint>(Som.CarOC.heading_direction);
+                        
+                        if (data.IsValueUpdated(Som.CarOC.speed))
+                            item.car.speed = (Pace)data.GetAttributeValue<uint>(Som.CarOC.speed);
+
+                        if (data.IsValueUpdated(Som.CarOC.position))
+                            item.car.position = data.GetAttributeValue<Coordinate>(Som.CarOC.position);
+                            
+                        // report to the user
+                        Report($"Foreign Car updated car_id:{item.car.car_id} area:{item.car.belong_area} position:({item.car.position.X},{item.car.position.Y})" + Environment.NewLine);
+
+                    }
+                }
+                foreach (var item in manager.TLightObjects)
+                {
+                    if (data.ObjectInstance.Handle == item.Handle)
+                    {
+                        // Get parameter values - 1st method
+                        // First check whether  the attr is updated or not. Result returns 0/null if the updated attribute set does not contain the attr and its value 
+                        if (data.IsValueUpdated(Som.TLightOC.tlight_id))
+                            item.tlight.tlight_id = data.GetAttributeValue<string>(Som.TLightOC.tlight_id);
+                        if (data.IsValueUpdated(Som.TLightOC.state))
+                            item.tlight.state = (TLState)data.GetAttributeValue<uint>(Som.TLightOC.state);
+                        if (data.IsValueUpdated(Som.TLightOC.duration_red))
+                            item.tlight.duration_red = data.GetAttributeValue<Int64>(Som.TLightOC.duration_red);
+                        if (data.IsValueUpdated(Som.TLightOC.duration_green))
+                            item.tlight.duration_green = data.GetAttributeValue<Int64>(Som.TLightOC.duration_green);
+                        if (data.IsValueUpdated(Som.TLightOC.belong_area))
+                            item.tlight.belong_area = (Area)data.GetAttributeValue<uint>(Som.TLightOC.belong_area);
+                        // report to the user
+                        Report($"Foreign TLight update tlight_id{item.tlight.tlight_id} area:{item.tlight.belong_area} state:{item.tlight.state}");
+                    }
+                }
+                #endregion //User Code
             }
-            #endregion //User Code
-        }
 
-        // An Object is Removed
-        public override void FdAmb_ObjectRemovedHandler(object sender, HlaObjectEventArgs data)
+            // RTI says an Object is Removed, remove it yourself too if you have saved it
+            public override void FdAmb_ObjectRemovedHandler(object sender, HlaObjectEventArgs data)
         {   
-            ///only the cars can be removed so hte handler is not checked
+            ///only the cars (cars that you did not created) can be removed so the handler is not checked
             ///TODO: maybe I should also check for the traffic lights
             // Call the base class handler
             base.FdAmb_ObjectRemovedHandler(sender, data);
@@ -163,37 +248,76 @@ namespace JSSimge
             }
             #endregion //User Code
         }
-        #endregion
+
+        #endregion // Object Management Callbacks
 
 
+        #region Time Management Callbacks
+            // FdAmb_TimeRegulationEnabled
+            public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_TimeRegulationEnabled(sender, data);
 
-        private void RegisterObject(HlaObject obj)
+                #region User Code
+                Time = data.Time; //  Current logical time of the joined federate set by RTI
+                Report("Logical time set by RTI TR: " + Time);
+                #endregion //User Code
+            }
+
+            // FdAmb_TimeConstrainedEnabled
+            public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_TimeConstrainedEnabled(sender, data);
+
+                #region User Code
+                Time = data.Time; //  Current logical time of the joined federate set by RTI
+                Report("Logical time set by RTI TC: " + Time);
+                #endregion //User Code
+            }
+
+            // FdAmb_TimeAdvanceGrant
+            public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_TimeAdvanceGrant(sender, data);
+
+                #region User Code
+                Time = data.Time; //  Current logical time of the joined federate set by RTI
+                Report("Logical time set by RTI: " + Time);
+                #endregion //User Code
+            }
+            // FdAmb_RequestRetraction
+            public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
+            {
+                // Call the base class handler
+                base.FdAmb_RequestRetraction(sender, data);
+
+                #region User Code
+                throw new NotImplementedException("FdAmb_RequestRetraction");
+                #endregion //User Code
+            }
+        #endregion //Time Management Callbacks
+
+
+        //update the car position based on the timer, it is called in the simulation manager
+        public void UpdatePosition(CCarHlaObject car)
         {
-            RegisterHlaObject(obj);
-
-            //TODO read what are these
-            //// DDM - register object with regions
-            //// Create a list of attribute set and region set pairs
-            //AttributeHandleSetRegionHandleSetPairVector pairs = new AttributeHandleSetRegionHandleSetPairVector();
-            //// Construct the region set
-            //List<HlaRegion> regions = new List<HlaRegion>();
-            //regions.Add(aor1);
-            //// Populate the pairs. Here we use all the attributes of the object
-            //pairs.Pairs.Add(new KeyValuePair<List<HlaAttribute>, List<HlaRegion>>(obj.Attributes, regions));
-            //// register object attributes with related regions
-            //RegisterHlaObject(obj, pairs);
-            //associateRegionsForUpdates(obj, pairs);
+            // Add Values
+            car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
+            UpdateAttributeValues(car);
         }
 
         // Update attribute values
-        private void UpdateAll(CCarHlaObject car)
+        public void UpdateAll(CCarHlaObject car)
         {
             // Add Values
             car.AddAttributeValue(Som.CarOC.car_id, car.car.car_id);
             car.AddAttributeValue(Som.CarOC.belong_area, (uint)car.car.belong_area);
             car.AddAttributeValue(Som.CarOC.heading_direction, (uint)car.car.heading_direction);
             car.AddAttributeValue(Som.CarOC.speed, (uint)car.car.speed);
-            car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position); 
+            car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
             UpdateAttributeValues(car);
         }
 
@@ -202,14 +326,6 @@ namespace JSSimge
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(txt);
-        }
-
-        //update the car position based on the timer, it is called in the simulation manager
-        public void UpdatePosition(CCarHlaObject car)
-        {
-            // Add Values
-            car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
-            UpdateAttributeValues(car);
         }
 
         #endregion //Manually Added Code

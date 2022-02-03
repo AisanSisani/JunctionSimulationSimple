@@ -195,8 +195,8 @@ namespace JSSimge
 
             car.speed = (Pace)(pos);
 
-            // Encapsulate own tlight
-            CCarHlaObject encapsulatedCarObject = new CCarHlaObject(manager.federate.Som.TLightOC);
+            // Encapsulate own car
+            CCarHlaObject encapsulatedCarObject = new CCarHlaObject(manager.federate.Som.CarOC);
             encapsulatedCarObject.car = car;
             // add the car created to the simulation manager it will be index 0
             manager.CarObjects.Add(encapsulatedCarObject);

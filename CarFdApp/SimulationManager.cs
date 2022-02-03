@@ -88,10 +88,10 @@ namespace JSSimge
         // Update Ship Position TODO: create the timer and all the shit TIMER
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            // Update postition and report
-            federate.UpdatePosition(CarObjects[0]);
+            // Update all the attributes of the car
+            federate.UpdateAll(CarObjects[0]);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"{CarObjects[0].car.car_id}: {CarObjects[0].car.belong_area}, {CarObjects[0].car.heading_direction}, {CarObjects[0].car.speed}, ({CarObjects[0].car.position.X}, {CarObjects[0].car.position.Y})");
+            Console.WriteLine($"Timer Elapsed - {CarObjects[0].car.car_id}: {CarObjects[0].car.belong_area}, {CarObjects[0].car.heading_direction}, {CarObjects[0].car.speed}, ({CarObjects[0].car.position.X}, {CarObjects[0].car.position.Y})");
 
             //// report all ships
             //foreach (var item in ShipObjects)

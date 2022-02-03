@@ -41,10 +41,8 @@ namespace JSSimge
     
     #region Event Handlers
     #region Federate Callback Event Handlers
+
     #region Federation Management Callbacks
-        
-
-
         // FdAmb_FederationExecutionsReported -> not used
         public override void FdAmb_FederationExecutionsReported(object sender, HlaFederationManagementEventArgs data)
         {
@@ -95,7 +93,6 @@ namespace JSSimge
           throw new NotImplementedException("FdAmb_FederationSynchronized");
           #endregion //User Code
         }
-    
     
         // FdAmb_FederationSaveStatusResponse
         public override void FdAmb_FederationSaveStatusResponse(object sender, HlaFederationManagementEventArgs data)
@@ -202,62 +199,45 @@ namespace JSSimge
 
 
         #region Declaration Management Callbacks
+ 
+            // FdAmb_TurnInteractionsOffAdvisedHandler -> not used
+            public override void FdAmb_TurnInteractionsOffAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+            {
+              // Call the base class handler
+              base.FdAmb_TurnInteractionsOffAdvisedHandler(sender, data);
+      
+              #region User Code
+              throw new NotImplementedException("FdAmb_TurnInteractionsOffAdvisedHandler");
+              #endregion //User Code
+            }
+
+            // FdAmb_TurnInteractionsOnAdvisedHandler -> not used
+            public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+            {
+              // Call the base class handler
+              base.FdAmb_TurnInteractionsOnAdvisedHandler(sender, data);
+      
+              #region User Code
+              throw new NotImplementedException("FdAmb_TurnInteractionsOnAdvisedHandler");
+              #endregion //User Code
+            }
+        #endregion //Declaration Management Callbacks
         
-    // FdAmb_StopRegistrationForObjectClassAdvisedHandler
-    public override void FdAmb_StopRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
+        
+        #region Object Management Callbacks
+
+            // FdAmb_InteractionReceivedHandler -> not used
+            public override void FdAmb_InteractionReceivedHandler(object sender, HlaInteractionEventArgs data)
+            {
+              // Call the base class handler
+              base.FdAmb_InteractionReceivedHandler(sender, data);
       
-      #region User Code
-      throw new NotImplementedException("FdAmb_StopRegistrationForObjectClassAdvisedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_TurnInteractionsOffAdvisedHandler
-    public override void FdAmb_TurnInteractionsOffAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TurnInteractionsOffAdvisedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_TurnInteractionsOffAdvisedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_TurnInteractionsOnAdvisedHandler
-    public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TurnInteractionsOnAdvisedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_TurnInteractionsOnAdvisedHandler");
-      #endregion //User Code
-    }
-    #endregion //Declaration Management Callbacks
-    #region Object Management Callbacks
-    
-    
-    // FdAmb_ObjectAttributesReflectedHandler
-    public override void FdAmb_ObjectAttributesReflectedHandler(object sender, HlaObjectEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_ObjectAttributesReflectedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_ObjectAttributesReflectedHandler");
-      #endregion //User Code
-    }
-    // FdAmb_InteractionReceivedHandler
-    public override void FdAmb_InteractionReceivedHandler(object sender, HlaInteractionEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_InteractionReceivedHandler(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_InteractionReceivedHandler");
-      #endregion //User Code
-    }
-    #endregion //Object Management Callbacks
+              #region User Code
+              throw new NotImplementedException("FdAmb_InteractionReceivedHandler");
+              #endregion //User Code
+            }
+        #endregion //Object Management Callbacks
+
     #region Ownership Management Callbacks
     // FdAmb_AttributeOwnershipAssumptionRequested
     public override void FdAmb_AttributeOwnershipAssumptionRequested(object sender, HlaOwnershipManagementEventArgs data)
@@ -340,48 +320,10 @@ namespace JSSimge
       #endregion //User Code
     }
     #endregion //Ownership Management Callbacks
-    #region Time Management Callbacks
-    // FdAmb_TimeRegulationEnabled
-    public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeRegulationEnabled(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_TimeRegulationEnabled");
-      #endregion //User Code
-    }
-    // FdAmb_TimeConstrainedEnabled
-    public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeConstrainedEnabled(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_TimeConstrainedEnabled");
-      #endregion //User Code
-    }
-    // FdAmb_TimeAdvanceGrant
-    public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_TimeAdvanceGrant(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_TimeAdvanceGrant");
-      #endregion //User Code
-    }
-    // FdAmb_RequestRetraction
-    public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
-    {
-      // Call the base class handler
-      base.FdAmb_RequestRetraction(sender, data);
-      
-      #region User Code
-      throw new NotImplementedException("FdAmb_RequestRetraction");
-      #endregion //User Code
-    }
-    #endregion //Time Management Callbacks
+    
+        
+        #region Time Management Callbacks
+        #endregion //Time Management Callbacks
     #endregion //Federate Callback Event Handlers
     #endregion //Event Handlers
   }
