@@ -40,14 +40,18 @@ namespace JSSimge
     #region Constructor
     public CSimulationManager()
     {
-        // Initialize the application-specific federate
-        federate = new CTLightFdApp(this);
-        // Initialize the federation execution
-        federate.FederationExecution.Name = "JSFederation";
-        federate.FederationExecution.FederateType = "TLightFd";
-        federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
-        // Handle RTI type variation
-        initialize();
+            // Initialize the application-specific federate
+            federate = new CTLightFdApp(this);
+            // Initialize the federation execution
+            federate.FederationExecution.Name = "JSFederation";
+            federate.FederationExecution.FederateType = "TLightFd";
+            federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
+
+            // Time management TIMER
+            federate.Lookahead = 1;
+
+            // Handle RTI type variation
+            initialize();
     }
     #endregion //Constructor
     
@@ -76,27 +80,28 @@ namespace JSSimge
     private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
             Report("TimerElapsed", ConsoleColor.Blue);
-        // Update all the attributes of the car
-        federate.UpdateAll(TLightObject);
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine($"Timer Elapsed - {TLightObject.tlight.state})");
+            // Update all the attributes of the car
+            federate.UpdateAll(TLightObject);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Timer Elapsed - {TLightObject.tlight.state})");
 
-        //// report all ships
-        //foreach (var item in ShipObjects)
-        //{
-        //  Console.WriteLine($"{item.Ship.Callsign}: ({item.Ship.Position.X}, {item.Ship.Position.Y}), {item.Ship.Heading}, {item.Ship.Speed}");
-        //}
+            //// report all ships
+            //foreach (var item in ShipObjects)
+            //{
+            //  Console.WriteLine($"{item.Ship.Callsign}: ({item.Ship.Position.X}, {item.Ship.Position.Y}), {item.Ship.Heading}, {item.Ship.Speed}");
+            //}
 
-        // Force a garbage collection to occur. TODO
-    }
-
-        // report
-        private void Report(string txt, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(txt);
+            // Force a garbage collection to occur. TODO
+            GC.Collect();
         }
 
-        #endregion //Methods
+    // report
+    private void Report(string txt, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(txt);
     }
+
+    #endregion //Methods
+  }
 }

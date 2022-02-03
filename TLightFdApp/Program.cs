@@ -61,10 +61,14 @@ namespace JSSimge
             bool result = manager.federate.InitializeFederation(manager.federate.FederationExecution);
 
             // Initialize themes TODO
-            
+            // TM Initialization
+            manager.federate.EnableAsynchronousDelivery();
+            manager.federate.EnableTimeConstrained();
+
             // FM Test
             manager.federate.ListFederationExecutions();
 
+            
 
             // *************************************************
             // Main Simulation Loop - loops until ESC is pressed
@@ -78,26 +82,43 @@ namespace JSSimge
 
                 if (tlight.state == TLState.red)
                 {
-                    Console.WriteLine("State is red. Sleep for {0} ms.", (int)tlight.duration_red);
+
+                    Report($"State is red. Sleep for {(int)tlight.duration_red} ms.", ConsoleColor.Green);
                     Thread.Sleep((int)tlight.duration_red);
-                    Console.WriteLine("Change state to green");
+                    Report("Change state to green", ConsoleColor.Green);
                     tlight.state = TLState.green;
                 }
                 else
                 {
-                    Console.WriteLine("State is green. Sleep for {0} ms.", (int)tlight.duration_green);
+                    Report($"State is green. Sleep for {(int)tlight.duration_green} ms.", ConsoleColor.Green);
                     Thread.Sleep((int)tlight.duration_green);
-                    Console.WriteLine("Change state to red");
+                    Report("Change state to red", ConsoleColor.Green);
                     tlight.state = TLState.red;
                 }
             } while (!Terminate);
 
+            // TM Tests
+            manager.federate.DisableAsynchronousDelivery();
+            manager.federate.DisableTimeConstrained();
+            manager.federate.QueryLogicalTime();
+            manager.federate.QueryLookahead(); // generates exception as this federate is TC.
+            double galt;
+            bool res = manager.federate.queryGALT(out galt);
+            bool res2 = manager.federate.queryGALT();
+            double lits;
+            bool res4 = manager.federate.QueryLITS(out lits);
+            bool res3 = manager.federate.QueryLITS();
 
             // *************************************************
             // Shutdown
             // *************************************************
             // Finalize user interface
             ConsoleKeyListener.Interrupt();
+
+            // Finalize Federation Execution
+            // Remove objects
+            manager.timer.Stop(); // stop reporting the ship position
+            manager.federate.DeleteObjectInstance(manager.TLightObject);
 
             // Leave and destroy federation execution
             bool result2 = manager.federate.FinalizeFederation(manager.federate.FederationExecution);
@@ -193,5 +214,12 @@ namespace JSSimge
               + "                        " + "TLightFdApp v1.0.0" + "\n"
               + "***************************************************************************");
         }
+        // report
+        private static void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(txt);
+        }
+
     }
 }

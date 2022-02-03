@@ -114,6 +114,8 @@ namespace JSSimge
         // Computational Model
         public void Move(double dt)
         {
+            Program.Report($"Move called position:({position.X},{position.Y})", ConsoleColor.Green);
+            
             double d = 0.1; // distance taken in delta time.
 
             switch (speed)
@@ -134,6 +136,7 @@ namespace JSSimge
                     d = 5.0 * dt;
                     break;
             }
+            Program.Report($"--- d:{d}", ConsoleColor.Green);
 
             //calculate the new position
             Coordinate newPostion;
@@ -155,6 +158,7 @@ namespace JSSimge
                     newPostion.X = position.X - d;
                     break;
             }
+            Program.Report($"--- newPosition:({newPostion.X},{newPostion.Y})", ConsoleColor.Green);
 
             //check if the new position is out of map
             switch (belong_area)
@@ -180,8 +184,10 @@ namespace JSSimge
 
             if (Exit)
             {
+                Program.Report($"--- Out of map", ConsoleColor.Green);
                 position = newPostion;
                 //TODO send the new position to the RTI
+                Program.Report($"--- position changed:({position.X},{position.Y})", ConsoleColor.Green);
                 return;
             }
 
@@ -223,24 +229,29 @@ namespace JSSimge
                     break;
 
             }
-
+            Program.Report($"--- At or after jucntion newPostion: ({newPostion.X},{newPostion.Y})", ConsoleColor.Green);
             Area newArea = belong_area;
+            Direction newDirection = heading_direction;
 
             if (cross)
             {
                 // check the light
                 Boolean isGreen = isTLightGreen(newArea);
-
                 if(isGreen)
                 {
-                    position = newPostion;
-                    // send position to the RTI
-                    return;
+                    Program.Report($"--- Green light", ConsoleColor.Green);
+                    newArea = chooseNextArea();
+                    newPostion = updatePositionBasedOnArea(newArea);
+                    newDirection = updateDirectionBasedOnArea(newArea);
+                    
                 }
                 else
                 {
-                    newArea = chooseNextArea();
-                    newPostion = updatePositionBasedOnArea(newArea); 
+                    Program.Report($"--- Red light", ConsoleColor.Green);
+                    position = newPostion;
+                    // send position to the RTI
+                    Program.Report($"--- position changed:({position.X},{position.Y})", ConsoleColor.Green);
+                    return;
 
                 }
                 
@@ -250,12 +261,17 @@ namespace JSSimge
             Boolean empty = isPositionEmpty(newArea, newPostion);
             if (empty)
             {
+                Program.Report($"--- Empty Position", ConsoleColor.Green);
                 position = newPostion;
+                belong_area = newArea;
+                heading_direction = newDirection;
                 // TODO send the new position to the RTI
+                Program.Report($"--- position changed:({position.X},{position.Y})", ConsoleColor.Green);
                 return;
             }
             else
             {
+                Program.Report($"--- Not Empty Position", ConsoleColor.Green);
                 return;
             }
         }

@@ -71,8 +71,10 @@ namespace JSSimge
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
             old_time = DateTime.Now.TimeOfDay.TotalSeconds;
+            int iteration = 0;
             do
             {
+                Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
@@ -241,5 +243,13 @@ namespace JSSimge
               + "                        " + "CarFdApp v1.0.0" + "\n"
               + "***************************************************************************");
         }
+
+        // report
+        public static void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(txt);
+        }
+
     }
 }

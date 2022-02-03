@@ -52,6 +52,8 @@ namespace JSSimge
                 base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
 
                 #region User Code
+                Report("FdAmb_StartRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
+
                 // Check that this is for the CarOC
                 if (data.ObjectClassHandle == Som.CarOC.Handle)
                     RegisterObject(manager.CarObjects[0]);
@@ -86,6 +88,8 @@ namespace JSSimge
                 base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
 
                 #region User Code
+                Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
+
                 manager.timer.Stop(); // move this to turn off attribute update callback
                 #endregion //User Code
             }
@@ -99,6 +103,7 @@ namespace JSSimge
                 base.FdAmb_ObjectDiscoveredHandler(sender, data);
 
                 #region User Code
+                Report("FdAmb_ObjectDiscoveredHandler", ConsoleColor.Blue);
                 // if the object is a car
                 if (data.ClassHandle == Som.CarOC.Handle)
                 {
@@ -146,24 +151,26 @@ namespace JSSimge
                 base.FdAmb_AttributeValueUpdateRequestedHandler(sender, data);
 
                 #region User Code
+                Report("FdAmb_AttributeValueUpdateRequestedHandler", ConsoleColor.Blue);
+
                 // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
                 if (data.ObjectInstance.Handle == manager.CarObjects[0].Handle)
                 {
-                    // We can further try to figure out the attributes for which update is requested.
-                    //foreach (var item in data.ObjectInstance.Attributes)
-                    //{
-                    //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
-                    //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
-                    //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
-                    //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
-                    //}
+                        // We can further try to figure out the attributes for which update is requested.
+                        //foreach (var item in data.ObjectInstance.Attributes)
+                        //{
+                        //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
+                        //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
+                        //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
+                        //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
+                        //}
 
-                    // We can update all attributes if we dont want to check every attribute.
-                    UpdateAll(manager.CarObjects[0]);
-                    //UpdateName(manager.Ships[0]);
-                    //UpdatePosition(manager.Ships[0]);
-                    //UpdateHeading(manager.Ships[0]);
-                    //UpdateSpeed(manager.Ships[0]);
+                        // We can update all attributes if we dont want to check every attribute.
+                        UpdateAll(manager.CarObjects[0]);
+                        //UpdateName(manager.Ships[0]);
+                        //UpdatePosition(manager.Ships[0]);
+                        //UpdateHeading(manager.Ships[0]);
+                        //UpdateSpeed(manager.Ships[0]);
                 }
                 #endregion //User Code
             }
@@ -175,6 +182,8 @@ namespace JSSimge
                 base.FdAmb_ObjectAttributesReflectedHandler(sender, data);
 
                 #region User Code
+
+                Report("", ConsoleColor.Blue);
                 foreach (var item in manager.CarObjects)
                 {
                     if (data.ObjectInstance.Handle == item.Handle)
@@ -225,85 +234,95 @@ namespace JSSimge
 
             // RTI says an Object is Removed, remove it yourself too if you have saved it
             public override void FdAmb_ObjectRemovedHandler(object sender, HlaObjectEventArgs data)
-        {   
-            ///only the cars (cars that you did not created) can be removed so the handler is not checked
-            ///TODO: maybe I should also check for the traffic lights
-            // Call the base class handler
-            base.FdAmb_ObjectRemovedHandler(sender, data);
+            {   
+                ///only the cars (cars that you did not created) can be removed so the handler is not checked
+                ///TODO: maybe I should also check for the traffic lights
+                // Call the base class handler
+                base.FdAmb_ObjectRemovedHandler(sender, data);
 
-            #region User Code
-            // Lock while taking a snapshot - to avoid foreach loop enumeration exception
-            CCarHlaObject[] snap = new CCarHlaObject[manager.CarObjects.Count];
-            lock (thisLock)
-            {
-                manager.CarObjects.CopyTo(snap, 0);
-            }
-            foreach (CCarHlaObject car in snap)
-            {
-                if (data.ObjectInstance.Handle == car.Handle)// Find the Object
+                #region User Code
+                Report("FdAmb_ObjectRemovedHandler", ConsoleColor.Blue);
+                // Lock while taking a snapshot - to avoid foreach loop enumeration exception
+                CCarHlaObject[] snap = new CCarHlaObject[manager.CarObjects.Count];
+                lock (thisLock)
                 {
-                    manager.CarObjects.Remove(car);
-                    Report($"Ship: {car.car.car_id} left. Number of Ships Now: {manager.CarObjects.Count}" + Environment.NewLine);
+                    manager.CarObjects.CopyTo(snap, 0);
                 }
+                foreach (CCarHlaObject car in snap)
+                {
+                    if (data.ObjectInstance.Handle == car.Handle)// Find the Object
+                    {
+                        manager.CarObjects.Remove(car);
+                        Report($"Ship: {car.car.car_id} left. Number of Ships Now: {manager.CarObjects.Count}" + Environment.NewLine);
+                    }
+                }
+                #endregion //User Code
             }
-            #endregion //User Code
-        }
 
         #endregion // Object Management Callbacks
 
 
         #region Time Management Callbacks
-            // FdAmb_TimeRegulationEnabled
-            public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
-            {
-                // Call the base class handler
-                base.FdAmb_TimeRegulationEnabled(sender, data);
+        // FdAmb_TimeRegulationEnabled
+        public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TimeRegulationEnabled(sender, data);
 
-                #region User Code
-                Time = data.Time; //  Current logical time of the joined federate set by RTI
-                Report("Logical time set by RTI TR: " + Time);
-                #endregion //User Code
-            }
+            #region User Code
+            Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
+            Time = data.Time; //  Current logical time of the joined federate set by RTI
+            Report("Logical time set by RTI TR: " + Time);
+            #endregion //User Code
+        }
 
-            // FdAmb_TimeConstrainedEnabled
-            public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
-            {
-                // Call the base class handler
-                base.FdAmb_TimeConstrainedEnabled(sender, data);
+        // FdAmb_TimeConstrainedEnabled
+        public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TimeConstrainedEnabled(sender, data);
 
-                #region User Code
-                Time = data.Time; //  Current logical time of the joined federate set by RTI
-                Report("Logical time set by RTI TC: " + Time);
-                #endregion //User Code
-            }
+            #region User Code
+            Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
 
-            // FdAmb_TimeAdvanceGrant
-            public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
-            {
-                // Call the base class handler
-                base.FdAmb_TimeAdvanceGrant(sender, data);
+            Time = data.Time; //  Current logical time of the joined federate set by RTI
+            Report("Logical time set by RTI TC: " + Time);
+            #endregion //User Code
+        }
 
-                #region User Code
-                Time = data.Time; //  Current logical time of the joined federate set by RTI
-                Report("Logical time set by RTI: " + Time);
-                #endregion //User Code
-            }
-            // FdAmb_RequestRetraction
-            public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
-            {
-                // Call the base class handler
-                base.FdAmb_RequestRetraction(sender, data);
+        // FdAmb_TimeAdvanceGrant
+        public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TimeAdvanceGrant(sender, data);
 
-                #region User Code
-                throw new NotImplementedException("FdAmb_RequestRetraction");
-                #endregion //User Code
-            }
+            #region User Code
+            Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
+
+            Time = data.Time; //  Current logical time of the joined federate set by RTI
+            Report("Logical time set by RTI: " + Time);
+            #endregion //User Code
+        }
+        // FdAmb_RequestRetraction
+        public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_RequestRetraction(sender, data);
+
+            #region User Code
+            Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
+
+            throw new NotImplementedException("FdAmb_RequestRetraction");
+            #endregion //User Code
+        }
         #endregion //Time Management Callbacks
 
 
         //update the car position based on the timer, it is called in the simulation manager
         public void UpdatePosition(CCarHlaObject car)
         {
+            Report("UpdatePosition", ConsoleColor.Blue);
+
             // Add Values
             car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
             UpdateAttributeValues(car);
@@ -312,6 +331,8 @@ namespace JSSimge
         // Update attribute values
         public void UpdateAll(CCarHlaObject car)
         {
+            Report("UpdateAll", ConsoleColor.Blue);
+
             // Add Values
             car.AddAttributeValue(Som.CarOC.car_id, car.car.car_id);
             car.AddAttributeValue(Som.CarOC.belong_area, (uint)car.car.belong_area);
@@ -325,6 +346,11 @@ namespace JSSimge
         private void Report(string txt)
         {
             Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(txt);
+        }
+        private void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
             Console.WriteLine(txt);
         }
 

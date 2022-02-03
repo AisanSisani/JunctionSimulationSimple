@@ -57,7 +57,7 @@ namespace JSSimge
             if (data.ObjectClassHandle == Som.TLightOC.Handle)
                 RegisterObject(manager.TLightObject);
 
-            //TODO the timer starts here
+            // the timer starts here TIMER
             manager.timer.Start(); // move this to turn on attribute update callback
             #endregion //User Code
         }
@@ -128,6 +128,30 @@ namespace JSSimge
             }
             #endregion //User Code
         }
+
+        public override void FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(sender, data);
+
+            #region User Code
+            // Start to update the position periodically TIMER
+            manager.timer.Start(); // OpenRti does not support this callback
+            #endregion //User Code
+        }
+
+        // -> idk
+        public override void FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(sender, data);
+
+            #region User Code
+            // Stop to update the position TIMER
+            manager.timer.Stop();
+            #endregion //User Code
+        }
+
         #endregion // Object Management Callbacks
 
 
