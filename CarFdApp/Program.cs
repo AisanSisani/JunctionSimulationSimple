@@ -195,6 +195,8 @@ namespace JSSimge
 
             car.speed = (Pace)(pos);
 
+            car.manager = manager;
+       
             // Encapsulate own car
             CCarHlaObject encapsulatedCarObject = new CCarHlaObject(manager.federate.Som.CarOC);
             encapsulatedCarObject.car = car;

@@ -22,6 +22,8 @@ namespace JSSimge
 
         public bool Exit = false; // is car exited the map?
         public double length_street = 20;
+
+        public CSimulationManager manager;
         #endregion //Declarations
 
         public CCar()
@@ -222,12 +224,14 @@ namespace JSSimge
 
             }
 
+            Area newArea = belong_area;
+
             if (cross)
             {
-                TLState light = TLState.red;
-                //TODO check the light
+                // check the light
+                Boolean isGreen = isTLightGreen(newArea);
 
-                if(light == TLState.red)
+                if(isGreen)
                 {
                     position = newPostion;
                     // send position to the RTI
@@ -235,15 +239,15 @@ namespace JSSimge
                 }
                 else
                 {
-                    Area newArea = chooseNextArea();
+                    newArea = chooseNextArea();
                     newPostion = updatePositionBasedOnArea(newArea); 
 
                 }
                 
             }
 
-            // TODO check if the new position empty
-            Boolean empty = false;
+            // check if the new position empty
+            Boolean empty = isPositionEmpty(newArea, newPostion);
             if (empty)
             {
                 position = newPostion;
@@ -283,6 +287,65 @@ namespace JSSimge
             newArea = list[index];
             return newArea;
         }
+
+        public Boolean isPositionEmpty(Area area, Coordinate position)
+        {
+            //not checking the current car
+            for (int i = 1; i < manager.CarObjects.Count; i++)            {
+                CCar car = manager.CarObjects[i].car;
+                if ((car.belong_area == area) && (car.position.X == position.X) && (car.position.Y == position.Y))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public Boolean isPositionEmpty(Coordinate position)
+        {
+            //not checking the current car
+            for (int i = 1; i < manager.CarObjects.Count; i++)
+            {
+                CCar car = manager.CarObjects[i].car;
+                if ((car.position.X == position.X) && (car.position.Y == position.Y))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public Boolean isTLightGreen(Area area)
+        {
+            foreach (var item in manager.TLightObjects)
+            {
+                if (item.tlight.belong_area == area)
+                {
+                    if (item.tlight.state == TLState.red)
+                        return false;
+                    else
+                        return true;
+                }
+            }
+
+            Report($"Error: The traffic light in {area} has not been found", ConsoleColor.Red);
+            return false;
+        }
+
+        private void Report(string txt, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(txt);
+        }
+
+
+        private void Report(string txt)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(txt);
+        }
+
+
+
+
     }
 
 }
