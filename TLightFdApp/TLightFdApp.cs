@@ -58,15 +58,15 @@ namespace JSSimge
                 RegisterObject(manager.TLightObject);
 
             // the timer starts here TIMER
-            Report("Timer start", ConsoleColor.Blue);
-            manager.timer.Start(); // move this to turn on attribute update callback
+            //Report("Timer start", ConsoleColor.Blue);
+            //manager.timer.Start(); // move this to turn on attribute update callback
             #endregion //User Code
         }
 
         private void RegisterObject(HlaObject obj)
         {
             Report("RegisterObject", ConsoleColor.Blue);
-            RegisterHlaObject(obj);
+            if (!RegisterHlaObject(obj)) Report("Light could not be registered", ConsoleColor.Red);
 
             //TODO read what are these
             //// DDM - register object with regions
@@ -91,7 +91,7 @@ namespace JSSimge
             #region User Code
             Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
 
-            manager.timer.Stop(); // move this to turn off attribute update callback
+            //manager.timer.Stop(); // move this to turn off attribute update callback
             #endregion //User Code
         }
         #endregion // Declaration Management Callbacks
@@ -125,7 +125,7 @@ namespace JSSimge
             #region User Code
             Report("Turn Updates On", ConsoleColor.Blue);
             // Start to update the position periodically TIMER
-            manager.timer.Start(); // OpenRti does not support this callback
+            //manager.timer.Start(); // OpenRti does not support this callback
             #endregion //User Code
         }
 
@@ -139,7 +139,7 @@ namespace JSSimge
             Report("Turn Updates off", ConsoleColor.Blue);
 
             // Stop to update the position TIMER
-            manager.timer.Stop();
+            //manager.timer.Stop();
             #endregion //User Code
         }
 

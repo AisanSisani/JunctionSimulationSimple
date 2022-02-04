@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic; // for List
 using System.Threading;
+using System.Timers;
 // Racon
 using Racon;
 using Racon.RtiLayer;
@@ -21,6 +22,7 @@ namespace JSSimge
         static CCar car = new CCar();
         static bool Terminate = false; // exit switch for app
         static double old_time = DateTime.Now.TimeOfDay.TotalSeconds; //TIMER
+        static System.Timers.Timer timerMove = new System.Timers.Timer(1000); // timer for moving car per sec
 
         // Communication layer related structures
         ///static public CTLightFdApp federate; //Application-specific federate 
@@ -71,7 +73,8 @@ namespace JSSimge
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
             old_time = DateTime.Now.TimeOfDay.TotalSeconds;
-            int iteration = 0;
+            timerMove.Elapsed += TimerElapsed;
+            timerMove.Start();
             do
             {
                 //Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
@@ -80,14 +83,8 @@ namespace JSSimge
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
 
-                // Move our local ship
-                car.Move(GetTimeStep());
-                //Report($"position: ({car.position.X},{car.position.Y})", ConsoleColor.Green);
-                // send the updates
-                //manager.federate.SendMessage(car.car_id, car.belong_area, car.position); 
-
             } while (!Terminate && !car.Exit);
-
+            timerMove.Stop();
             // TM Tests
             /*
             manager.federate.DisableAsynchronousDelivery();
@@ -261,6 +258,19 @@ namespace JSSimge
         {
             Console.ForegroundColor = color;
             Console.WriteLine(txt);
+        }
+
+        private static void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+
+            // Move our local ship
+            car.Move(GetTimeStep());
+            Report($"car_id:{car.car_id} area:{car.belong_area} position: ({car.position.X},{car.position.Y})", ConsoleColor.Green);
+            // send the updates
+            //manager.federate.SendMessage(car.car_id, car.belong_area, car.position); //using interaction
+            manager.federate.UpdateAll(manager.CarObjects[0]); //using object update
+
+            GC.Collect();
         }
 
     }

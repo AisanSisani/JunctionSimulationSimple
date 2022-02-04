@@ -230,16 +230,16 @@ namespace JSSimge
 
                 Report("Change state to green", ConsoleColor.Green);
                 tlight.state = TLState.green;
-                if(!manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state))
-                    Report("message NOT sent", ConsoleColor.Red);
             }
             else
             {
                 Report("Change state to red", ConsoleColor.Green);
                 tlight.state = TLState.red;
-                if (!manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state))
-                    Report("message NOT sent", ConsoleColor.Red);
             }
+
+            manager.federate.UpdateAll(manager.TLightObject); //using object update
+            //if (!manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state)) Report("message NOT sent", ConsoleColor.Red); // using interaction
+
             GC.Collect();
         }
     }

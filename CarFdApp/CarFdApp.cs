@@ -186,7 +186,7 @@ namespace JSSimge
 
                 #region User Code
 
-                Report("FdAmb_ObjectAttributesReflectedHandler------------------------------------------", ConsoleColor.Blue);
+                Report("-----------------------FdAmb_ObjectAttributesReflectedHandler", ConsoleColor.Blue);
                 foreach (var item in manager.CarObjects)
                 {
                     if (data.ObjectInstance.Handle == item.Handle)
@@ -230,7 +230,8 @@ namespace JSSimge
                             item.tlight.belong_area = (Area)data.GetAttributeValue<uint>(Som.TLightOC.belong_area);
                         // report to the user
                         Report($"Foreign TLight update tlight_id{item.tlight.tlight_id} area:{item.tlight.belong_area} state:{item.tlight.state}", ConsoleColor.Blue);
-                    }
+
+                }
                 }
                 #endregion //User Code
             }
@@ -460,7 +461,7 @@ namespace JSSimge
             if (!UpdateAttributeValues(car, "")) Report("Updates Car ALL not successfull", ConsoleColor.Red);
         }
 
-
+        /* not used teh light will automatically update
         public void requestForUpdateTLight(CTLightHlaObject tlight)
         {
             Report("asked for update", ConsoleColor.Gray);
@@ -473,7 +474,7 @@ namespace JSSimge
             attributes.Add(Som.TLightOC.belong_area);
             if(!RequestAttributeValueUpdate(tlight, attributes, "")) Report("request for update not sucessfull (requestForUpdateTLight)", ConsoleColor.Red);
         }
-
+        */
 
         // Send CarMIC.Message
         public bool SendMessage(string car_id, Area area, Coordinate position)

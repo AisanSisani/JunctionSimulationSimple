@@ -21,7 +21,7 @@ namespace JSSimge
         public Coordinate position;
 
         public bool Exit = false; // is car exited the map?
-        public double length_street = 20;
+        public double length_street = 100;
 
         public CSimulationManager manager;
         #endregion //Declarations
@@ -114,7 +114,7 @@ namespace JSSimge
         // Computational Model
         public void Move(double dt)
         {
-            //Program.Report($"Move called position:({position.X},{position.Y})", ConsoleColor.Green);
+            //Program.Report($"Move called origiposition:({position.X},{position.Y})", ConsoleColor.Green);
             
             double d = 0.1; // distance taken in delta time.
 
@@ -238,15 +238,15 @@ namespace JSSimge
                 //Program.Report($"--- At or after jucntion newPostion: ({newPostion.X},{newPostion.Y})", ConsoleColor.Green);
                 // check the light
                 Boolean isGreen = isTLightGreen(newArea);
-                if(isGreen)
+                if (isGreen)
                 {
                     Program.Report($"--- Green light", ConsoleColor.Green);
                     newArea = chooseNextArea();
                     newPostion = updatePositionBasedOnArea(newArea);
                     newDirection = updateDirectionBasedOnArea(newArea);
-                    Program.Report($"--- New Area {newArea}", ConsoleColor.Red);
-                    Program.Report($"--- New Position ({newPostion.X},{newPostion.Y})", ConsoleColor.Red);
-                    Program.Report($"--- New Direction {newDirection}", ConsoleColor.Red);
+                    Program.Report($"--- New Area {newArea}", ConsoleColor.Yellow);
+                    Program.Report($"--- New Position ({newPostion.X},{newPostion.Y})", ConsoleColor.Yellow);
+                    Program.Report($"--- New Direction {newDirection}", ConsoleColor.Yellow);
                 }
                 else
                 {
@@ -255,16 +255,14 @@ namespace JSSimge
                     // send position to the RTI
                     //Program.Report($"--- position changed:({position.X},{position.Y})", ConsoleColor.Green);
                     return;
-
                 }
-                
             }
 
             // check if the new position empty
             Boolean empty = isPositionEmpty(newArea, newPostion);
             if (empty)
             {
-                Program.Report($"--- Empty Position", ConsoleColor.Green);
+                //Program.Report($"--- Empty Position", ConsoleColor.Green);
                 position = newPostion;
                 belong_area = newArea;
                 heading_direction = newDirection;
@@ -274,7 +272,7 @@ namespace JSSimge
             }
             else
             {
-                Program.Report($"--- Not Empty Position", ConsoleColor.Green);
+                //Program.Report($"--- Not Empty Position", ConsoleColor.Green);
                 return;
             }
         }
@@ -338,17 +336,18 @@ namespace JSSimge
             {
                 if (item.tlight.belong_area == area)
                 {
-                   
-                    //manager.federate.askForUpdateTLight(item);
 
-                    if (item.tlight.state == TLState.red)
-                        return false;
-                    else
-                        return true;
+                        //manager.federate.requestForUpdateTLight(item);
+
+                        if (item.tlight.state == TLState.red)
+                            return false;
+                        else
+                            return true;
+                    
                 }
             }
 
-            //Report($"Error: The traffic light in {area} has not been found", ConsoleColor.Red);
+            //Report($"Error: The traffic light in {area} has not been found yet", ConsoleColor.Red);
             return false;
         }
 
