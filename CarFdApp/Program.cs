@@ -24,9 +24,6 @@ namespace JSSimge
         static double old_time = DateTime.Now.TimeOfDay.TotalSeconds; //TIMER
         static System.Timers.Timer timerMove = new System.Timers.Timer(1000); // timer for moving car per sec
 
-        // Communication layer related structures
-        ///static public CTLightFdApp federate; //Application-specific federate 
-
         // Main Entrance for Application
         static void Main(string[] args)
         {
@@ -62,8 +59,9 @@ namespace JSSimge
 
             // Initialize themes TODO
             // TM Initialization
-            ///manager.federate.EnableAsynchronousDelivery();
-            ///manager.federate.EnableTimeConstrained();
+            //manager.federate.EnableAsynchronousDelivery();
+            //manager.federate.EnableTimeConstrained();
+            
 
             // FM Test
             manager.federate.ListFederationExecutions();
@@ -85,6 +83,7 @@ namespace JSSimge
 
             } while (!Terminate && !car.Exit);
             timerMove.Stop();
+      
             // TM Tests
             /*
             manager.federate.DisableAsynchronousDelivery();
@@ -109,7 +108,6 @@ namespace JSSimge
 
             // Finalize Federation Execution
             // Remove objects
-            manager.timer.Stop(); // stop reporting the ship position
             manager.federate.DeleteObjectInstance(manager.CarObjects[0]); //destroy the car you registred
 
             // Leave and destroy federation execution
@@ -150,6 +148,9 @@ namespace JSSimge
                     case ConsoleKey.T:
                         Terminate = true;
                         break;
+                    case ConsoleKey.S:
+                        manager.federate.RegisterFederationSynchronizationPoint("Wait", "");
+                        break;
                 }
             } while (true);
         }
@@ -163,49 +164,59 @@ namespace JSSimge
         // Set Car configuration
         private static void setCarConfiguration()
         {
-            /*
-            // initialization with user input
             Console.ForegroundColor = ConsoleColor.Yellow;
-
-            // car_id
-            Console.WriteLine();
-            Console.Write("Enter Car ID: ");
-            car.car_id = Console.ReadLine();
-
-            //public Area belong_area;
-            int pos = 0;
+            int choice = 0;            
             do
             {
-                Console.Write("Enter Initial Belong Area (north_down = 0, south_up = 3, east_left = 5, west_right = 6): ");
-                int.TryParse(Console.ReadLine(), out pos);
-            } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
+                Console.Write("Choose   0:default input, 1:your input: ");
+                int.TryParse(Console.ReadLine(), out choice);
+            } while ((choice != 0) && (choice != 1));
 
-            car.belong_area = (Area)(pos); 
-
-            //public Direction heading_direction;
-            //based on belong area
-            car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
-
-            //public Coordinate position;
-            //based on belong area
-            car.position = car.updatePositionBasedOnArea(car.belong_area);
-
-            //public Pace speed;
-            pos = 0;
-            do
+            if(choice == 1)
             {
-                Console.Write("Enter Speed (very_slow(+1)=0, slow(+2)=1, medium(+3)=2, fast(+4)=3), very_fast(+5)=4: ");
-                int.TryParse(Console.ReadLine(), out pos);
-            } while ((pos != 0) && (pos != 1) && (pos != 2) && (pos != 3) && (pos != 4));
+                // initialization with user input
+                // car_id
+                Console.WriteLine();
+                Console.Write("Enter Car ID: ");
+                car.car_id = Console.ReadLine();
 
-            car.speed = (Pace)(pos);
-            */
-            car.car_id = "first_car";
-            car.belong_area = Area.north_down;
-            car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
-            car.position = car.updatePositionBasedOnArea(car.belong_area);
-            car.speed = Pace.very_fast;
+                //public Area belong_area;
+                int pos = 0;
+                do
+                {
+                    Console.Write("Enter Initial Belong Area (north_down = 0, south_up = 3, east_left = 5, west_right = 6): ");
+                    int.TryParse(Console.ReadLine(), out pos);
+                } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
 
+                car.belong_area = (Area)(pos);
+
+                //public Direction heading_direction;
+                //based on belong area
+                car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
+
+                //public Coordinate position;
+                //based on belong area
+                car.position = car.updatePositionBasedOnArea(car.belong_area);
+
+                //public Pace speed;
+                pos = 0;
+                do
+                {
+                    Console.Write("Enter Speed (very_slow(+1)=0, slow(+2)=1, medium(+3)=2, fast(+4)=3), very_fast(+5)=4: ");
+                    int.TryParse(Console.ReadLine(), out pos);
+                } while ((pos != 0) && (pos != 1) && (pos != 2) && (pos != 3) && (pos != 4));
+
+                car.speed = (Pace)(pos);
+            }
+            else
+            {
+                car.car_id = "first_car";
+                car.belong_area = Area.north_down;
+                car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
+                car.position = car.updatePositionBasedOnArea(car.belong_area);
+                car.speed = Pace.very_fast;
+
+            }
             car.manager = manager;
        
             // Encapsulate own car

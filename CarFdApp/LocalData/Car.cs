@@ -337,9 +337,7 @@ namespace JSSimge
                 if (item.tlight.belong_area == area)
                 {
 
-                        //manager.federate.requestForUpdateTLight(item);
-
-                        if (item.tlight.state == TLState.red)
+                    if (item.tlight.state == TLState.red)
                             return false;
                         else
                             return true;

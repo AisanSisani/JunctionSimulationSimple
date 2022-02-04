@@ -24,9 +24,6 @@ namespace JSSimge
         static bool Terminate = false; // exit switch for app
         static System.Timers.Timer timerState = new System.Timers.Timer(); // timer for the lights to switch
 
-        // Communication layer related structures
-        ///static public CTLightFdApp federate; //Application-specific federate 
-
         // Main Entrance for Application
         static void Main(string[] args)
         {
@@ -62,11 +59,9 @@ namespace JSSimge
             bool result = manager.federate.InitializeFederation(manager.federate.FederationExecution);
 
             // Initialize themes TODO
-            // TM Initialization
-            /*
-            manager.federate.EnableAsynchronousDelivery();
-            manager.federate.EnableTimeConstrained();
-            */
+            //TM Initialization
+            //manager.federate.EnableAsynchronousDelivery();
+            //manager.federate.EnableTimeConstrained();
 
             // FM Test
             manager.federate.ListFederationExecutions();
@@ -108,8 +103,6 @@ namespace JSSimge
             ConsoleKeyListener.Interrupt();
 
             // Finalize Federation Execution
-            // Remove objects
-            //manager.timer.Stop(); // stop reporting the ship position
             manager.federate.DeleteObjectInstance(manager.TLightObject);
 
             // Leave and destroy federation execution
@@ -136,6 +129,10 @@ namespace JSSimge
                     case ConsoleKey.T:
                         Terminate = true;
                         break;
+                    case ConsoleKey.S:
+                        manager.federate.RegisterFederationSynchronizationPoint("Wait", "");
+                        break;
+
                 }
             } while (true);
         }
@@ -149,45 +146,57 @@ namespace JSSimge
         // Set ship configuration
         private static void setTLightConfiguration()
         {
-            /*
-            // initialization with user input
             Console.ForegroundColor = ConsoleColor.Yellow;
-
-            // tlight_id
-            Console.WriteLine();
-            Console.Write("Enter TLight ID: ");
-            tlight.tlight_id = Console.ReadLine();
-
-            // initial state
-            tlight.state = TLState.red;
-
-            // duration red
-            int duration;
-            Console.Write("Enter Red Duration: ");
-            int.TryParse(Console.ReadLine(), out duration);
-            tlight.duration_red = duration;
-
-            // duration green
-            Console.Write("Enter Green Duration: ");
-            int.TryParse(Console.ReadLine(), out duration);
-            tlight.duration_green = duration;
-
-            // belong area
-            int pos = 0;
+            int choice = 0;
             do
             {
-                Console.Write("Enter Belong Area (north_down = 0, south_up = 3, east_left = 5, west_right = 6): ");
-                int.TryParse(Console.ReadLine(), out pos);
-            } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
+                Console.Write("Choose   0:default input, 1:your input: ");
+                int.TryParse(Console.ReadLine(), out choice);
+            } while ((choice != 0) && (choice != 1));
 
-            tlight.belong_area = (Area)(pos);
-            */
+            if (choice == 1)
+            {
+                // initialization with user input
+                Console.ForegroundColor = ConsoleColor.Yellow;
 
-            tlight.tlight_id = "first_tlight";
-            tlight.state = TLState.red;
-            tlight.duration_green = 10000;
-            tlight.duration_red = 10000;
-            tlight.belong_area = Area.north_down;
+                // tlight_id
+                Console.WriteLine();
+                Console.Write("Enter TLight ID: ");
+                tlight.tlight_id = Console.ReadLine();
+
+                // initial state
+                tlight.state = TLState.red;
+
+                // duration red
+                int duration;
+                Console.Write("Enter Red Duration: ");
+                int.TryParse(Console.ReadLine(), out duration);
+                tlight.duration_red = duration;
+
+                // duration green
+                Console.Write("Enter Green Duration: ");
+                int.TryParse(Console.ReadLine(), out duration);
+                tlight.duration_green = duration;
+
+                // belong area
+                int pos = 0;
+                do
+                {
+                    Console.Write("Enter Belong Area (north_down = 0, south_up = 3, east_left = 5, west_right = 6): ");
+                    int.TryParse(Console.ReadLine(), out pos);
+                } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
+
+                tlight.belong_area = (Area)(pos);
+            }
+            else
+            {
+
+                tlight.tlight_id = "first_tlight";
+                tlight.state = TLState.red;
+                tlight.duration_green = 10000;
+                tlight.duration_red = 10000;
+                tlight.belong_area = Area.north_down;
+            }
 
             // Encapsulate own tlight
             CTLightHlaObject encapsulatedShipObject = new CTLightHlaObject(manager.federate.Som.TLightOC);

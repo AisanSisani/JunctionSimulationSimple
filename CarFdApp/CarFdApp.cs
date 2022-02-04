@@ -16,6 +16,7 @@
 // System
 using System;
 using System.Collections.Generic; // for List
+using System.Threading;
 // Racon
 using Racon;
 using Racon.RtiLayer;
@@ -40,13 +41,54 @@ namespace JSSimge
             }
         #endregion //Constructor
 
-        // (TODO if you want add the synchronization handlers in this region)
         #region Federation Management Callbacks
+
+        // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler -> does nothing
+        public override void FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(sender, data);
+
+            #region User Code
+            Report("Synchronization Confirmed", ConsoleColor.Blue);
+            #endregion //User Code
+        }
+        // FdAmb_OnSynchronizationPointRegistrationFailedHandler -> does nothing
+        public override void FdAmb_OnSynchronizationPointRegistrationFailedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_OnSynchronizationPointRegistrationFailedHandler(sender, data);
+
+            #region User Code
+            Report("Synchronization Failed", ConsoleColor.Red);
+            #endregion //User Code
+        }
+        // FdAmb_SynchronizationPointAnnounced
+        public override void FdAmb_SynchronizationPointAnnounced(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_SynchronizationPointAnnounced(sender, data);
+
+            #region User Code
+            //do nothing
+            manager.federate.SynchronizationPointAchieved(data.Label, true);
+            #endregion //User Code
+        }
+        // FdAmb_FederationSynchronized
+        public override void FdAmb_FederationSynchronized(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_FederationSynchronized(sender, data);
+
+            #region User Code
+            Report($"Synchronization ({data.Label}) is completed.", ConsoleColor.Blue);
+            #endregion //User Code
+        }
         #endregion
 
         #region Declaration Management Callbacks
-            // registering the car you have created
-            public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+        // registering the car you have created
+        public override void FdAmb_StartRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
             {
                 // Call the base class handler
                 base.FdAmb_StartRegistrationForObjectClassAdvisedHandler(sender, data);
@@ -58,9 +100,6 @@ namespace JSSimge
                 if (data.ObjectClassHandle == Som.CarOC.Handle)
                     RegisterObject(manager.CarObjects[0]);
 
-                //TODO the timer starts here
-                Report("TImer start", ConsoleColor.Blue);
-                manager.timer.Start(); // move this to turn on attribute update callback
                 #endregion //User Code
             }
 
@@ -90,8 +129,6 @@ namespace JSSimge
 
                 #region User Code
                 Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
-
-                manager.timer.Stop(); // move this to turn off attribute update callback
                 #endregion //User Code
             }
 
@@ -271,7 +308,6 @@ namespace JSSimge
             #region User Code
             Report("Turn Updates On", ConsoleColor.Blue);
             // Start to update the position periodically TIMER
-            manager.timer.Start(); // OpenRti does not support this callback
             #endregion //User Code
         }
 
@@ -285,7 +321,6 @@ namespace JSSimge
             Report("Turn Updates off", ConsoleColor.Blue);
 
             // Stop to update the position TIMER
-            manager.timer.Stop();
             #endregion //User Code
         }
 
@@ -308,23 +343,16 @@ namespace JSSimge
                 // Get parameter values
                 // 1st Method
                 // Check which parameter is updated
-                //if (data.IsValueUpdated(Som.TLightMIC.tlight_id)) TODO
+                if (data.IsValueUpdated(Som.TLightMIC.tlight_id))
                     tlight_id = data.GetParameterValue<string>(Som.TLightMIC.tlight_id);
 
-                //if (data.IsValueUpdated(Som.TLightMIC.area))
+                if (data.IsValueUpdated(Som.TLightMIC.area))
                     belong_area = (Area)data.GetParameterValue<uint>(Som.TLightMIC.area);
 
-                //if (data.IsValueUpdated(Som.TLightMIC.state))
+                if (data.IsValueUpdated(Som.TLightMIC.state))
                     state = (TLState)data.GetParameterValue<uint>(Som.TLightMIC.state);
 
                 Report($"recieve data {tlight_id}, {belong_area}, {state}", ConsoleColor.Blue);
-                // 2nd method
-                //foreach (var item in data.Interaction.Parameters)
-                //{
-                //if (Som.ChatIC.Sender.Handle == item.Handle) sentBy = item.GetValue<string>();
-                //else if (Som.ChatIC.Message.Handle == item.Handle) msg = item.GetValue<string>();
-                //else if (Som.ChatIC.TimeStamp.Handle == item.Handle) ts = item.GetValue<DateTime>(); // must match with AddValue() type
-                //}
 
                 foreach (var item in manager.TLightObjects)
                 {
@@ -355,13 +383,6 @@ namespace JSSimge
                     position = data.GetParameterValue<Coordinate>(Som.CarMIC.position);
                 Report($"recieve data {car_id}, ({belong_area}, {position.X},{position.Y})", ConsoleColor.Blue);
 
-                // 2nd method
-                //foreach (var item in data.Interaction.Parameters)
-                //{
-                //if (Som.ChatIC.Sender.Handle == item.Handle) sentBy = item.GetValue<string>();
-                //else if (Som.ChatIC.Message.Handle == item.Handle) msg = item.GetValue<string>();
-                //else if (Som.ChatIC.TimeStamp.Handle == item.Handle) ts = item.GetValue<DateTime>(); // must match with AddValue() type
-                //}
 
                 foreach (var item in manager.CarObjects)
                 {
@@ -380,7 +401,7 @@ namespace JSSimge
 
         #endregion // Object Management Callbacks
 
-        /*
+        
                 #region Time Management Callbacks
                 // FdAmb_TimeRegulationEnabled
                 public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
@@ -391,7 +412,7 @@ namespace JSSimge
                     #region User Code
                     Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
                     Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI TR: " + Time);
+                    Report("Logical time set by RTI TR: " + Time, ConsoleColor.Yellow);
                     #endregion //User Code
                 }
 
@@ -405,7 +426,7 @@ namespace JSSimge
                     Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
 
                     Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI TC: " + Time);
+                    Report("Logical time set by RTI TC: " + Time, ConsoleColor.Yellow);
                     #endregion //User Code
                 }
 
@@ -419,7 +440,7 @@ namespace JSSimge
                     Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
 
                     Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI: " + Time);
+                    Report("Logical time set by RTI: " + Time, ConsoleColor.Yellow);
                     #endregion //User Code
                 }
                 // FdAmb_RequestRetraction
@@ -431,12 +452,12 @@ namespace JSSimge
                     #region User Code
                     Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
 
-                    throw new NotImplementedException("FdAmb_RequestRetraction");
+                    //throw new NotImplementedException("FdAmb_RequestRetraction");
                     #endregion //User Code
                 }
                 #endregion //Time Management Callbacks
 
-        */
+        
         //update the car position based on the timer, it is called in the simulation manager
         public void UpdatePosition(CCarHlaObject car)
         {

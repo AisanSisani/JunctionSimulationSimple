@@ -53,47 +53,7 @@ namespace JSSimge
           //throw new NotImplementedException("FdAmb_FederationExecutionsReported");
           #endregion //User Code
         }
-        // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler
-        public override void FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(object sender, HlaFederationManagementEventArgs data)
-        {
-          // Call the base class handler
-          base.FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(sender, data);
-      
-          #region User Code
-          throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationConfirmedHandler");
-          #endregion //User Code
-        }
-        // FdAmb_OnSynchronizationPointRegistrationFailedHandler
-        public override void FdAmb_OnSynchronizationPointRegistrationFailedHandler(object sender, HlaFederationManagementEventArgs data)
-        {
-          // Call the base class handler
-          base.FdAmb_OnSynchronizationPointRegistrationFailedHandler(sender, data);
-      
-          #region User Code
-          throw new NotImplementedException("FdAmb_OnSynchronizationPointRegistrationFailedHandler");
-          #endregion //User Code
-        }
-        // FdAmb_SynchronizationPointAnnounced
-        public override void FdAmb_SynchronizationPointAnnounced(object sender, HlaFederationManagementEventArgs data)
-        {
-          // Call the base class handler
-          base.FdAmb_SynchronizationPointAnnounced(sender, data);
-      
-          #region User Code
-          throw new NotImplementedException("FdAmb_SynchronizationPointAnnounced");
-          #endregion //User Code
-        }
-        // FdAmb_FederationSynchronized
-        public override void FdAmb_FederationSynchronized(object sender, HlaFederationManagementEventArgs data)
-        {
-          // Call the base class handler
-          base.FdAmb_FederationSynchronized(sender, data);
-      
-          #region User Code
-          throw new NotImplementedException("FdAmb_FederationSynchronized");
-          #endregion //User Code
-        }
-    
+        
         // FdAmb_FederationSaveStatusResponse
         public override void FdAmb_FederationSaveStatusResponse(object sender, HlaFederationManagementEventArgs data)
         {

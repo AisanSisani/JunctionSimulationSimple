@@ -35,7 +35,6 @@ namespace JSSimge
         // Local data structures
         public BindingList<CCarHlaObject> CarObjects; // Keeps the ships in the environment
         public BindingList<CTLightHlaObject> TLightObjects; // Keeps the stations in the environment
-        public System.Timers.Timer timer = new System.Timers.Timer(1000); // Timer to report the position periodically, TIMER
         #endregion //Declarations
 
         #region Constructor
@@ -51,8 +50,8 @@ namespace JSSimge
             federate.FederationExecution.FederateType = "CarFd";
             federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
 
-            // Time management TIMER
-            //federate.Lookahead = 1;
+            // Time management
+            federate.Lookahead = 1;
 
             // Handle RTI type variation
             initialize();
@@ -93,30 +92,6 @@ namespace JSSimge
             break;
             }
         }
-
-        /*
-        // Update Car Position TODO: create the timer and all the shit TIMER
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            //Program.Report("TimerElapsed", ConsoleColor.Blue);
-            // Update all the attributes of the car
-            federate.UpdateAll(CarObjects[0]);
-            
-            //Program.Report($"Timer Elapsed - {CarObjects[0].car.car_id}: {CarObjects[0].car.belong_area}, ({CarObjects[0].car.position.X}, {CarObjects[0].car.position.Y})", ConsoleColor.Blue);
-
-            //// report all ships
-            //foreach (var item in ShipObjects)
-            //{
-            //  Console.WriteLine($"{item.Ship.Callsign}: ({item.Ship.Position.X}, {item.Ship.Position.Y}), {item.Ship.Heading}, {item.Ship.Speed}");
-            //}
-
-            // Force a garbage collection to occur.
-            GC.Collect();
-        }
-        */
-
-   
-
         #endregion //Methods
     }
 }

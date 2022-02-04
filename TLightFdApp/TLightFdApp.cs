@@ -16,6 +16,7 @@
 // System
 using System;
 using System.Collections.Generic; // for List
+using System.Threading;
 // Racon
 using Racon;
 using Racon.RtiLayer;
@@ -41,6 +42,47 @@ namespace JSSimge
 
         // (TODO if you want add the synchronization handlers in this region)
         #region Federation Management Callbacks
+        // FdAmb_OnSynchronizationPointRegistrationConfirmedHandler -> does nothing
+        public override void FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_OnSynchronizationPointRegistrationConfirmedHandler(sender, data);
+
+            #region User Code
+            Report("Synchronization Confirmed", ConsoleColor.Blue);
+            #endregion //User Code
+        }
+        // FdAmb_OnSynchronizationPointRegistrationFailedHandler -> does nothing
+        public override void FdAmb_OnSynchronizationPointRegistrationFailedHandler(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_OnSynchronizationPointRegistrationFailedHandler(sender, data);
+
+            #region User Code
+            Report("Synchronization Failed", ConsoleColor.Red);
+            #endregion //User Code
+        }
+        // FdAmb_SynchronizationPointAnnounced
+        public override void FdAmb_SynchronizationPointAnnounced(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_SynchronizationPointAnnounced(sender, data);
+
+            #region User Code
+            // do nothing
+            manager.federate.SynchronizationPointAchieved(data.Label, true);
+            #endregion //User Code
+        }
+        // FdAmb_FederationSynchronized
+        public override void FdAmb_FederationSynchronized(object sender, HlaFederationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_FederationSynchronized(sender, data);
+
+            #region User Code
+            Report($"Synchronization ({data.Label}) is completed.", ConsoleColor.Blue);
+            #endregion //User Code
+        }
         #endregion
 
         #region Declaration Management Callbacks
@@ -144,7 +186,7 @@ namespace JSSimge
         }
 
         #endregion // Object Management Callbacks
-/*
+
 
         #region Time Management Callbacks
         // FdAmb_TimeRegulationEnabled
@@ -157,7 +199,7 @@ namespace JSSimge
             Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
 
             Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI TR: " + Time);
+            Report("Logical time set by RTI TR: " + Time, ConsoleColor.Yellow);
             #endregion //User Code
         }
 
@@ -171,7 +213,7 @@ namespace JSSimge
             Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
 
             Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI TC: " + Time);
+            Report("Logical time set by RTI TC: " + Time, ConsoleColor.Yellow);
             #endregion //User Code
         }
 
@@ -185,7 +227,7 @@ namespace JSSimge
             Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
 
             Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI: " + Time);
+            Report("Logical time set by RTI: " + Time, ConsoleColor.Yellow);
             #endregion //User Code
         }
         // FdAmb_RequestRetraction
@@ -197,12 +239,12 @@ namespace JSSimge
             #region User Code
             Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
 
-            throw new NotImplementedException("FdAmb_RequestRetraction");
+            //throw new NotImplementedException("FdAmb_RequestRetraction");
             #endregion //User Code
         }
         #endregion //Time Management Callbacks
 
-*/
+
         //update the car position based on the timer, it is called in the simulation manager
         public void UpdateState(CTLightHlaObject tlight)
         {
