@@ -241,6 +241,23 @@ namespace JSSimge
             UpdateAttributeValues(tlight);
         }
 
+        // Send TLightMIC.Message
+        public bool SendMessage(string tlight_id, Area area, TLState state)
+        {
+            Report("send message", ConsoleColor.Blue);
+
+            Racon.RtiLayer.HlaInteraction interaction = new Racon.RtiLayer.HlaInteraction(Som.TLightMIC);
+
+
+            // Add Values
+            interaction.AddParameterValue(Som.TLightMIC.tlight_id, tlight_id); // String
+            interaction.AddParameterValue<Area>(Som.TLightMIC.area, area);
+            interaction.AddParameterValue<TLState>(Som.TLightMIC.state, state);
+
+            // Send interaction
+            return (SendInteraction(interaction));
+        }
+
         // report
         private void Report(string txt)
         {

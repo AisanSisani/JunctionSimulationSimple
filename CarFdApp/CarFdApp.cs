@@ -289,6 +289,91 @@ namespace JSSimge
             #endregion //User Code
         }
 
+        // Interaction Received
+        public override void FdAmb_InteractionReceivedHandler(object sender, Racon.RtiLayer.HlaInteractionEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_InteractionReceivedHandler(sender, data);
+
+            Report("recieve message", ConsoleColor.Blue);
+
+            // User code
+            // Which interaction class?
+            Report($"Interaction recieve {data.Interaction.GetType()}", ConsoleColor.Blue);
+
+            if (data.Interaction.ClassHandle == Som.TLightMIC.Handle)
+            {
+                string tlight_id = "";
+                Area belong_area = new Area();
+                TLState state = new TLState();
+
+                // Get parameter values
+                // 1st Method
+                // Check which parameter is updated
+                if (data.IsValueUpdated(Som.TLightMIC.tlight_id))
+                    tlight_id = data.GetParameterValue<string>(Som.TLightMIC.tlight_id);
+
+                if (data.IsValueUpdated(Som.TLightMIC.area))
+                    belong_area = (Area)data.GetParameterValue<uint>(Som.TLightMIC.area);
+
+                if (data.IsValueUpdated(Som.TLightMIC.state))
+                    state = (TLState)data.GetParameterValue<uint>(Som.TLightMIC.state);
+
+
+                // 2nd method
+                //foreach (var item in data.Interaction.Parameters)
+                //{
+                //if (Som.ChatIC.Sender.Handle == item.Handle) sentBy = item.GetValue<string>();
+                //else if (Som.ChatIC.Message.Handle == item.Handle) msg = item.GetValue<string>();
+                //else if (Som.ChatIC.TimeStamp.Handle == item.Handle) ts = item.GetValue<DateTime>(); // must match with AddValue() type
+                //}
+
+                foreach (var item in manager.TLightObjects)
+                {
+                    if (tlight_id == item.tlight.tlight_id)
+                    {
+                        item.tlight.state = state;
+                    }
+                }
+
+            }
+            if (data.Interaction.ClassHandle == Som.CarMIC.Handle)
+            {
+                string car_id = "";
+                Area belong_area = new Area();
+                Coordinate position = new Coordinate();
+
+                // Get parameter values
+                // 1st Method
+                // Check which parameter is updated
+                if (data.IsValueUpdated(Som.CarMIC.car_id))
+                    car_id = data.GetParameterValue<string>(Som.CarMIC.car_id);
+
+                if (data.IsValueUpdated(Som.CarMIC.area))
+                    belong_area = (Area)data.GetParameterValue<uint>(Som.CarMIC.area);
+
+                if (data.IsValueUpdated(Som.CarMIC.position))
+                    position = data.GetParameterValue<Coordinate>(Som.CarMIC.position);
+
+
+                // 2nd method
+                //foreach (var item in data.Interaction.Parameters)
+                //{
+                //if (Som.ChatIC.Sender.Handle == item.Handle) sentBy = item.GetValue<string>();
+                //else if (Som.ChatIC.Message.Handle == item.Handle) msg = item.GetValue<string>();
+                //else if (Som.ChatIC.TimeStamp.Handle == item.Handle) ts = item.GetValue<DateTime>(); // must match with AddValue() type
+                //}
+
+                foreach (var item in manager.CarObjects)
+                {
+                    if (car_id == item.car.car_id)
+                    {
+                        item.car.position = position;
+                    }
+                }
+            }
+        }
+
         #endregion // Object Management Callbacks
 
         /*
@@ -384,6 +469,23 @@ namespace JSSimge
             attributes.Add(Som.TLightOC.duration_red);
             attributes.Add(Som.TLightOC.belong_area);
             RequestAttributeValueUpdate(tlight, attributes);
+        }
+
+
+        // Send CarMIC.Message
+        public bool SendMessage(string car_id, Area area, Coordinate position)
+        {
+            Report("send message", ConsoleColor.Blue);
+            Racon.RtiLayer.HlaInteraction interaction = new Racon.RtiLayer.HlaInteraction(Som.CarMIC);
+
+
+            // Add Values
+            interaction.AddParameterValue(Som.CarMIC.car_id, car_id); // String
+            interaction.AddParameterValue<Area>(Som.CarMIC.area, area);
+            interaction.AddParameterValue(Som.CarMIC.position, position); 
+            
+            // Send interaction
+            return (SendInteraction(interaction));
         }
 
 

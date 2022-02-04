@@ -225,17 +225,6 @@ namespace JSSimge
         
         
         #region Object Management Callbacks
-
-            // FdAmb_InteractionReceivedHandler -> not used
-            public override void FdAmb_InteractionReceivedHandler(object sender, HlaInteractionEventArgs data)
-            {
-              // Call the base class handler
-              base.FdAmb_InteractionReceivedHandler(sender, data);
-      
-              #region User Code
-              throw new NotImplementedException("FdAmb_InteractionReceivedHandler");
-              #endregion //User Code
-            }
         #endregion //Object Management Callbacks
 
     #region Ownership Management Callbacks

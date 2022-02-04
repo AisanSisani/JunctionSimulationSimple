@@ -1,9 +1,9 @@
 // **************************************************************************************************
-//		FederateSom
+//		CTLightMIC
 //
 //		generated
 //			by		: 	Simulation Generator (SimGe) v.0.3.3
-//			at		: 	Wednesday, January 19, 2022 6:50:09 PM
+//			at		: 	Friday, February 4, 2022 6:57:22 AM
 //		compatible with		: 	RACoN v.0.0.2.5
 //
 //		copyright		: 	(C) 
@@ -25,24 +25,32 @@ using JSSimge.Som;
 
 namespace JSSimge.Som
 {
-  public class FederateSom : Racon.ObjectModel.CObjectModel
-  {
+    public class CTLightMIC : HlaInteractionClass
+    {
         #region Declarations
-        #region SOM Declaration
-        public JSSimge.Som.CTLightOC TLightOC;
-        public JSSimge.Som.CTLightMIC TLightMIC;
-        #endregion
+        public HlaParameter area;
+        public HlaParameter tlight_id;
+        public HlaParameter state;
         #endregion //Declarations
 
         #region Constructor
-        public FederateSom() : base()
+        public CTLightMIC() : base()
         {
-              // Construct SOM
-              TLightOC = new JSSimge.Som.CTLightOC();
-              AddToObjectModel(TLightOC);
-              TLightMIC = new JSSimge.Som.CTLightMIC();
-              AddToObjectModel(TLightMIC);
+            // Initialize Class Properties
+            Name = "HLAinteractionRoot.TLightM";
+            ClassPS = PSKind.PublishSubscribe;
+
+            // Create Parameters
+            // area
+            area = new HlaParameter("area");
+            Parameters.Add(area);
+            // tlight_id
+            tlight_id = new HlaParameter("tlight_id");
+            Parameters.Add(tlight_id);
+            // state
+            state = new HlaParameter("state");
+            Parameters.Add(state);
         }
         #endregion //Constructor
-  }
+    }
 }

@@ -27,22 +27,28 @@ namespace JSSimge.Som
 {
   public class FederateSom : Racon.ObjectModel.CObjectModel
   {
-    #region Declarations
-    #region SOM Declaration
-    public JSSimge.Som.CCarOC CarOC;
-    public JSSimge.Som.CTLightOC TLightOC;
-    #endregion
-    #endregion //Declarations
-    
-    #region Constructor
-    public FederateSom() : base()
-    {
-      // Construct SOM
-      CarOC = new JSSimge.Som.CCarOC();
-      AddToObjectModel(CarOC);
-      TLightOC = new JSSimge.Som.CTLightOC();
-      AddToObjectModel(TLightOC);
-    }
-    #endregion //Constructor
+        #region Declarations
+        #region SOM Declaration
+        public JSSimge.Som.CCarOC CarOC;
+        public JSSimge.Som.CTLightOC TLightOC;
+        public JSSimge.Som.CTLightMIC TLightMIC;
+        public JSSimge.Som.CCarMIC CarMIC;
+        #endregion
+        #endregion //Declarations
+
+        #region Constructor
+        public FederateSom() : base()
+        {
+          // Construct SOM
+          CarOC = new JSSimge.Som.CCarOC();
+          AddToObjectModel(CarOC);
+          TLightOC = new JSSimge.Som.CTLightOC();
+          AddToObjectModel(TLightOC);
+            TLightMIC = new JSSimge.Som.CTLightMIC();
+            AddToObjectModel(TLightMIC);
+            CarMIC = new JSSimge.Som.CCarMIC();
+            AddToObjectModel(CarMIC);
+        }
+        #endregion //Constructor
   }
 }

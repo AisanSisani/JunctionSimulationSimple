@@ -74,6 +74,8 @@ namespace JSSimge
                     federate.Som.CarOC.PrivilegeToDelete.Name = "privilegeToDelete";
                     federate.Som.TLightOC.Name = "objectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
+                    federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
+                    federate.Som.CarMIC.Name = "interactionRoot.CarM";
                     //TODO make it relative
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\CarFdApp\Som\JSFom.fed";
                     break;
@@ -82,6 +84,8 @@ namespace JSSimge
                     federate.Som.CarOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
                     federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
+                    federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
+                    federate.Som.CarMIC.Name = "interactionRoot.CarM";
                     //TODO make it relative
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\CarFdApp\Som\JSFom.xml";
             break;

@@ -65,16 +65,18 @@ namespace JSSimge
       switch (federate.RTILibrary)
       {
         case RTILibraryType.HLA13_DMSO: case RTILibraryType.HLA13_Portico: case RTILibraryType.HLA13_OpenRti:
-                federate.Som.TLightOC.Name = "objectRoot.TLight";
-                federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
-                //TODO make it relative
-                federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.fed";
+                    federate.Som.TLightOC.Name = "objectRoot.TLight";
+                    federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
+                    federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
+                    //TODO make it relative
+                    federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.fed";
                 break;
         case RTILibraryType.HLA1516e_Portico: case RTILibraryType.HLA1516e_OpenRti:
-                federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
-                federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
-                //TODO make it relative
-                federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
+                    federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
+                    federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
+                    federate.Som.TLightMIC.Name = "HLAinteractionRoot.TLightM";
+                    //TODO make it relative
+                    federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
                 break;
       }
     }
