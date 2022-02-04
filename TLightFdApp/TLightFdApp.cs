@@ -123,9 +123,10 @@ namespace JSSimge
             //RegisterHlaObject(obj, pairs);
             //associateRegionsForUpdates(obj, pairs);
         }
+        #endregion
 
         #region Object Management Callbacks
-        
+
         // other federates asks you to update you values
         public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
         {
