@@ -121,16 +121,6 @@ namespace JSSimge
                 //associateRegionsForUpdates(obj, pairs);
             }
 
-            // Stop Registration
-            public override void FdAmb_StopRegistrationForObjectClassAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-            {
-                // Call the base class handler
-                base.FdAmb_StopRegistrationForObjectClassAdvisedHandler(sender, data);
-
-                #region User Code
-                Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
-                #endregion //User Code
-            }
         /*
         // FdAmb_TurnInteractionsOnAdvisedHandler -> not used
         public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
@@ -300,29 +290,6 @@ namespace JSSimge
                 #endregion //User Code
             }
 
-        public override void FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(sender, data);
-
-            #region User Code
-            Report("Turn Updates On", ConsoleColor.Blue);
-            // Start to update the position periodically TIMER
-            #endregion //User Code
-        }
-
-        // -> idk
-        public override void FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(sender, data);
-
-            #region User Code
-            Report("Turn Updates off", ConsoleColor.Blue);
-
-            // Stop to update the position TIMER
-            #endregion //User Code
-        }
         /*
         // Interaction Received
         public override void FdAmb_InteractionReceivedHandler(object sender, Racon.RtiLayer.HlaInteractionEventArgs data)
@@ -401,62 +368,6 @@ namespace JSSimge
         */
 
         #endregion // Object Management Callbacks
-
-        
-                #region Time Management Callbacks
-                // FdAmb_TimeRegulationEnabled
-                public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
-                {
-                    // Call the base class handler
-                    base.FdAmb_TimeRegulationEnabled(sender, data);
-
-                    #region User Code
-                    Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
-                    Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI TR: " + Time, ConsoleColor.Yellow);
-                    #endregion //User Code
-                }
-
-                // FdAmb_TimeConstrainedEnabled
-                public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
-                {
-                    // Call the base class handler
-                    base.FdAmb_TimeConstrainedEnabled(sender, data);
-
-                    #region User Code
-                    Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
-
-                    Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI TC: " + Time, ConsoleColor.Yellow);
-                    #endregion //User Code
-                }
-
-                // FdAmb_TimeAdvanceGrant
-                public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
-                {
-                    // Call the base class handler
-                    base.FdAmb_TimeAdvanceGrant(sender, data);
-
-                    #region User Code
-                    Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
-
-                    Time = data.Time; //  Current logical time of the joined federate set by RTI
-                    Report("Logical time set by RTI: " + Time, ConsoleColor.Yellow);
-                    #endregion //User Code
-                }
-                // FdAmb_RequestRetraction
-                public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
-                {
-                    // Call the base class handler
-                    base.FdAmb_RequestRetraction(sender, data);
-
-                    #region User Code
-                    Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
-
-                    //throw new NotImplementedException("FdAmb_RequestRetraction");
-                    #endregion //User Code
-                }
-                #endregion //Time Management Callbacks
 
         
         //update the car position based on the timer, it is called in the simulation manager
