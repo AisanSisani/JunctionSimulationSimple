@@ -269,6 +269,7 @@ namespace JSSimge
             if(!UpdateAttributeValues(tlight, "")) Report("Updates All not successfull", ConsoleColor.Red);
         }
 
+        /*
         // Send TLightMIC.Message
         public bool SendMessage(string tlight_id, Area area, TLState state)
         {
@@ -285,6 +286,7 @@ namespace JSSimge
             // Send interaction
             return (SendInteraction(interaction, ""));
         }
+        */
 
         // report
         private void Report(string txt)

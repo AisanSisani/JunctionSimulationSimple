@@ -65,7 +65,7 @@ namespace JSSimge
                     Console.WriteLine("Used RTILibraryType.HLA13_Portico or RTILibraryType.HLA13_OpenRti");
                     federate.Som.TLightOC.Name = "objectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
-                    federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
+                    //federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
                     //TODO make it relative
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.fed";
                 break;
@@ -73,7 +73,7 @@ namespace JSSimge
                     Console.WriteLine("Used RTILibraryType.HLA1516e_OpenRti");
                     federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
-                    federate.Som.TLightMIC.Name = "HLAinteractionRoot.TLightM";
+                    //federate.Som.TLightMIC.Name = "HLAinteractionRoot.TLightM";
                     //TODO make it relative
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.xml";
                 break;

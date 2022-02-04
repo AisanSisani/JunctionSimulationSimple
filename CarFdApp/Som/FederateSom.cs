@@ -31,8 +31,8 @@ namespace JSSimge.Som
         #region SOM Declaration
         public JSSimge.Som.CCarOC CarOC;
         public JSSimge.Som.CTLightOC TLightOC;
-        public JSSimge.Som.CTLightMIC TLightMIC;
-        public JSSimge.Som.CCarMIC CarMIC;
+        //public JSSimge.Som.CTLightMIC TLightMIC;
+        //public JSSimge.Som.CCarMIC CarMIC;
         #endregion
         #endregion //Declarations
 
@@ -44,10 +44,10 @@ namespace JSSimge.Som
           AddToObjectModel(CarOC);
           TLightOC = new JSSimge.Som.CTLightOC();
           AddToObjectModel(TLightOC);
-            TLightMIC = new JSSimge.Som.CTLightMIC();
+            /*TLightMIC = new JSSimge.Som.CTLightMIC();
             AddToObjectModel(TLightMIC);
             CarMIC = new JSSimge.Som.CCarMIC();
-            AddToObjectModel(CarMIC);
+            AddToObjectModel(CarMIC);*/
         }
         #endregion //Constructor
   }

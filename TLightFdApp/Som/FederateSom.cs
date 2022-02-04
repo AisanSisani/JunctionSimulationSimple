@@ -30,7 +30,7 @@ namespace JSSimge.Som
         #region Declarations
         #region SOM Declaration
         public JSSimge.Som.CTLightOC TLightOC;
-        public JSSimge.Som.CTLightMIC TLightMIC;
+        //public JSSimge.Som.CTLightMIC TLightMIC;
         #endregion
         #endregion //Declarations
 
@@ -40,8 +40,8 @@ namespace JSSimge.Som
               // Construct SOM
               TLightOC = new JSSimge.Som.CTLightOC();
               AddToObjectModel(TLightOC);
-              TLightMIC = new JSSimge.Som.CTLightMIC();
-              AddToObjectModel(TLightMIC);
+              //TLightMIC = new JSSimge.Som.CTLightMIC();
+              //AddToObjectModel(TLightMIC);
         }
         #endregion //Constructor
   }

@@ -131,7 +131,7 @@ namespace JSSimge
                 Report("FdAmb_StopRegistrationForObjectClassAdvisedHandler", ConsoleColor.Blue);
                 #endregion //User Code
             }
-
+        /*
         // FdAmb_TurnInteractionsOnAdvisedHandler -> not used
         public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
         {
@@ -141,7 +141,7 @@ namespace JSSimge
             #region User Code
             //nothing
             #endregion //User Code
-        }
+        }*/
         #endregion // Declaration Management Callbacks
 
         #region Object Management Callbacks
@@ -323,7 +323,7 @@ namespace JSSimge
             // Stop to update the position TIMER
             #endregion //User Code
         }
-
+        /*
         // Interaction Received
         public override void FdAmb_InteractionReceivedHandler(object sender, Racon.RtiLayer.HlaInteractionEventArgs data)
         {
@@ -398,6 +398,7 @@ namespace JSSimge
 
             Program.printStatus();
         }
+        */
 
         #endregion // Object Management Callbacks
 
@@ -497,6 +498,7 @@ namespace JSSimge
         }
         */
 
+        /*
         // Send CarMIC.Message
         public bool SendMessage(string car_id, Area area, Coordinate position)
         {
@@ -512,7 +514,7 @@ namespace JSSimge
             // Send interaction
             return (SendInteraction(interaction, ""));
         }
-
+        */
 
         // report
         private void Report(string txt)
