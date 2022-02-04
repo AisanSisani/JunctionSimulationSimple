@@ -59,6 +59,7 @@ namespace JSSimge
                     RegisterObject(manager.CarObjects[0]);
 
                 //TODO the timer starts here
+                Report("TImer start", ConsoleColor.Blue);
                 manager.timer.Start(); // move this to turn on attribute update callback
                 #endregion //User Code
             }
@@ -123,6 +124,9 @@ namespace JSSimge
                     attributes.Add(Som.CarOC.position);
                     RequestAttributeValueUpdate(newCar, attributes);
                 }
+
+
+
                 // if the obejct is a tlight
                 else if (data.ClassHandle == Som.TLightOC.Handle)
                 {
@@ -144,7 +148,7 @@ namespace JSSimge
                 #endregion //User Code
             }
 
-            // other federates asks you to update you values
+            // other federates asks you to update your values
             public override void FdAmb_AttributeValueUpdateRequestedHandler(object sender, HlaObjectEventArgs data)
             {
                 // Call the base class handler
@@ -183,7 +187,7 @@ namespace JSSimge
 
                 #region User Code
 
-                Report("", ConsoleColor.Blue);
+                Report("FdAmb_ObjectAttributesReflectedHandler", ConsoleColor.Blue);
                 foreach (var item in manager.CarObjects)
                 {
                     if (data.ObjectInstance.Handle == item.Handle)
@@ -341,6 +345,21 @@ namespace JSSimge
             car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
             UpdateAttributeValues(car);
         }
+
+
+        public void askForUpdateTLight(CTLightHlaObject tlight)
+        {
+            Report("asked for update", ConsoleColor.Gray);
+            // (3) Request Update Values for specific attributes only (in here all)
+            List<HlaAttribute> attributes = new List<HlaAttribute>();
+            attributes.Add(Som.TLightOC.tlight_id);
+            attributes.Add(Som.TLightOC.state);
+            attributes.Add(Som.TLightOC.duration_green);
+            attributes.Add(Som.TLightOC.duration_red);
+            attributes.Add(Som.TLightOC.belong_area);
+            RequestAttributeValueUpdate(tlight, attributes);
+        }
+
 
         // report
         private void Report(string txt)

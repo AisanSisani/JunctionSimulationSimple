@@ -35,12 +35,15 @@ namespace JSSimge
         // Local data structures
         public BindingList<CCarHlaObject> CarObjects; // Keeps the ships in the environment
         public BindingList<CTLightHlaObject> TLightObjects; // Keeps the stations in the environment
-        public System.Timers.Timer timer = new System.Timers.Timer(5000); // Timer to report the position periodically, TIMER
+        public System.Timers.Timer timer = new System.Timers.Timer(1000); // Timer to report the position periodically, TIMER
         #endregion //Declarations
 
         #region Constructor
         public CSimulationManager()
         {
+            // Hook up the Elapsed event for the timer. 
+            timer.Elapsed += TimerElapsed;
+
             // Initialize the application-specific federate
             federate = new CCarFdApp(this);
             // Initialize the federation execution
@@ -88,10 +91,11 @@ namespace JSSimge
         // Update Car Position TODO: create the timer and all the shit TIMER
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
+            //Program.Report("TimerElapsed", ConsoleColor.Blue);
             // Update all the attributes of the car
             federate.UpdateAll(CarObjects[0]);
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Timer Elapsed - {CarObjects[0].car.car_id}: {CarObjects[0].car.belong_area}, {CarObjects[0].car.heading_direction}, {CarObjects[0].car.speed}, ({CarObjects[0].car.position.X}, {CarObjects[0].car.position.Y})");
+            
+            //Program.Report($"Timer Elapsed - {CarObjects[0].car.car_id}: {CarObjects[0].car.belong_area}, ({CarObjects[0].car.position.X}, {CarObjects[0].car.position.Y})", ConsoleColor.Blue);
 
             //// report all ships
             //foreach (var item in ShipObjects)
@@ -102,6 +106,9 @@ namespace JSSimge
             // Force a garbage collection to occur.
             GC.Collect();
         }
+
+   
+
         #endregion //Methods
     }
 }

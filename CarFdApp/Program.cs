@@ -60,8 +60,8 @@ namespace JSSimge
 
             // Initialize themes TODO
             // TM Initialization
-            manager.federate.EnableAsynchronousDelivery();
-            manager.federate.EnableTimeConstrained();
+            ///manager.federate.EnableAsynchronousDelivery();
+            ///manager.federate.EnableTimeConstrained();
 
             // FM Test
             manager.federate.ListFederationExecutions();
@@ -74,7 +74,8 @@ namespace JSSimge
             int iteration = 0;
             do
             {
-                Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
+                //Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
+                //printStatus();
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
@@ -85,6 +86,7 @@ namespace JSSimge
             } while (!Terminate && !car.Exit);
 
             // TM Tests
+            /*
             manager.federate.DisableAsynchronousDelivery();
             manager.federate.DisableTimeConstrained();
             manager.federate.QueryLogicalTime();
@@ -95,7 +97,7 @@ namespace JSSimge
             double lits;
             bool res4 = manager.federate.QueryLITS(out lits);
             bool res3 = manager.federate.QueryLITS();
-
+            */
 
             // *************************************************
             // Shutdown
@@ -154,13 +156,14 @@ namespace JSSimge
         // Racon Information received
         private static void Federate_StatusMessageChanged(object sender, EventArgs e)
         {
-            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Racon Message: " + (sender as CCarFdApp).StatusMessage);
         }
 
         // Set Car configuration
         private static void setCarConfiguration()
         {
+            /*
             // initialization with user input
             Console.ForegroundColor = ConsoleColor.Yellow;
 
@@ -196,6 +199,12 @@ namespace JSSimge
             } while ((pos != 0) && (pos != 1) && (pos != 2) && (pos != 3) && (pos != 4));
 
             car.speed = (Pace)(pos);
+            */
+            car.car_id = "first_car";
+            car.belong_area = Area.north_down;
+            car.heading_direction = car.updateDirectionBasedOnArea(car.belong_area);
+            car.position = car.updatePositionBasedOnArea(car.belong_area);
+            car.speed = Pace.very_fast;
 
             car.manager = manager;
        
@@ -207,7 +216,7 @@ namespace JSSimge
         }
         private static void printConfiguration()
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\nThanks for input! The car configuration:");
             Console.WriteLine("ID: {0}", car.car_id);
             Console.WriteLine("Belong Area: {0}", car.belong_area);
@@ -219,17 +228,17 @@ namespace JSSimge
         // Print status TODO: fill them with more data, also check where it is called
         private static void printStatus()
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("*************** Status ***************");
             Console.WriteLine("Cars:");
             foreach (var item in manager.CarObjects)
             {
                 Console.WriteLine($"{item.car.car_id}: {item.car.belong_area}, ({item.car.position.X}, {item.car.position.Y})");
             }
-            Console.WriteLine("\nShips:");
+            Console.WriteLine("\nTLights:");
             foreach (var item in manager.TLightObjects)
             {
-                Console.WriteLine($"{item.tlight.tlight_id}: {item.tlight.belong_area}");
+                Console.WriteLine($"{item.tlight.tlight_id}: {item.tlight.belong_area} {item.tlight.state}");
             }
             Console.WriteLine("**************************************");
         }

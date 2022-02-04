@@ -30,10 +30,7 @@ namespace JSSimge
             // *************************************************
             // Program Initialization
             // *************************************************
-            // Instantiation
-            ///federate = new CTLightFdApp();// Initialize the application-specific federate
-            // Local data
-            ///tlight = new CTLightHlaObject(federate.Som.TLightOC);// local object
+            Console.ResetColor();
 
             // UI initialization -> ok
             PrintVersion();
@@ -50,6 +47,7 @@ namespace JSSimge
             setTLightConfiguration(); // get user input
             Console.Title = "TLightdApp: " + tlight.tlight_id; // set console title
             printConfiguration();// report to user
+            
             ConsoleKeyListener.Start();// start keyboard event listener
 
 
@@ -150,13 +148,14 @@ namespace JSSimge
         // Racon Information received
         private static void Federate_StatusMessageChanged(object sender, EventArgs e)
         {
-            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("Racon Message: " + (sender as CTLightFdApp).StatusMessage);
         }
 
         // Set ship configuration
         private static void setTLightConfiguration()
         {
+            /*
             // initialization with user input
             Console.ForegroundColor = ConsoleColor.Yellow;
 
@@ -188,6 +187,13 @@ namespace JSSimge
             } while ((pos != 0) && (pos != 3) && (pos != 5) && (pos != 6));
 
             tlight.belong_area = (Area)(pos);
+            */
+
+            tlight.tlight_id = "first_tlight";
+            tlight.state = TLState.red;
+            tlight.duration_green = 2000;
+            tlight.duration_red = 3000;
+            tlight.belong_area = Area.north_down;
 
             // Encapsulate own tlight
             CTLightHlaObject encapsulatedShipObject = new CTLightHlaObject(manager.federate.Som.TLightOC);
@@ -197,7 +203,7 @@ namespace JSSimge
         }
         private static void printConfiguration()
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\nThanks for input! The tlight configuration:");
             Console.WriteLine("ID: {0}", tlight.tlight_id);
             Console.WriteLine("State: {0}", tlight.state);

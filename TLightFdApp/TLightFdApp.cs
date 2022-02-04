@@ -58,12 +58,14 @@ namespace JSSimge
                 RegisterObject(manager.TLightObject);
 
             // the timer starts here TIMER
+            Report("Timer start", ConsoleColor.Blue);
             manager.timer.Start(); // move this to turn on attribute update callback
             #endregion //User Code
         }
 
         private void RegisterObject(HlaObject obj)
         {
+            Report("RegisterObject", ConsoleColor.Blue);
             RegisterHlaObject(obj);
 
             //TODO read what are these
