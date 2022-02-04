@@ -242,7 +242,6 @@ namespace JSSimge
                 {
                     Program.Report($"--- Green light", ConsoleColor.Green);
                     newArea = chooseNextArea();
-                    
                     newPostion = updatePositionBasedOnArea(newArea);
                     newDirection = updateDirectionBasedOnArea(newArea);
                     Program.Report($"--- New Area {newArea}", ConsoleColor.Red);
@@ -265,7 +264,7 @@ namespace JSSimge
             Boolean empty = isPositionEmpty(newArea, newPostion);
             if (empty)
             {
-                //Program.Report($"--- Empty Position", ConsoleColor.Green);
+                Program.Report($"--- Empty Position", ConsoleColor.Green);
                 position = newPostion;
                 belong_area = newArea;
                 heading_direction = newDirection;
@@ -275,7 +274,7 @@ namespace JSSimge
             }
             else
             {
-                //Program.Report($"--- Not Empty Position", ConsoleColor.Green);
+                Program.Report($"--- Not Empty Position", ConsoleColor.Green);
                 return;
             }
         }

@@ -112,21 +112,7 @@ namespace JSSimge
             // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
             if (data.ObjectInstance.Handle == manager.TLightObject.Handle)
             {
-                // We can further try to figure out the attributes for which update is requested.
-                //foreach (var item in data.ObjectInstance.Attributes)
-                //{
-                //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
-                //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
-                //}
-
-                // We can update all attributes if we dont want to check every attribute.
                 UpdateAll(manager.TLightObject);
-                //UpdateName(manager.Ships[0]);
-                //UpdatePosition(manager.Ships[0]);
-                //UpdateHeading(manager.Ships[0]);
-                //UpdateSpeed(manager.Ships[0]);
             }
             #endregion //User Code
         }
@@ -224,7 +210,7 @@ namespace JSSimge
             Report("UpdateState", ConsoleColor.Blue);
 
             tlight.AddAttributeValue<TLState>(Som.TLightOC.state, tlight.tlight.state);
-            UpdateAttributeValues(tlight);
+            if (!UpdateAttributeValues(tlight, "")) Report("Updates State not successfull", ConsoleColor.Red);
         }
 
         // Update attribute values
@@ -238,7 +224,7 @@ namespace JSSimge
             tlight.AddAttributeValue(Som.TLightOC.duration_red, (Int64)tlight.tlight.duration_red);
             tlight.AddAttributeValue(Som.TLightOC.duration_green, (Int64)tlight.tlight.duration_green);
             tlight.AddAttributeValue(Som.TLightOC.state, (uint)tlight.tlight.state);
-            UpdateAttributeValues(tlight);
+            if(!UpdateAttributeValues(tlight, "")) Report("Updates All not successfull", ConsoleColor.Red);
         }
 
         // Send TLightMIC.Message

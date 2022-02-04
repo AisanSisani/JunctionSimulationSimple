@@ -102,7 +102,7 @@ namespace JSSimge
             base.FdAmb_TurnInteractionsOnAdvisedHandler(sender, data);
 
             #region User Code
-            //throw new NotImplementedException("FdAmb_TurnInteractionsOnAdvisedHandler");
+            //nothing
             #endregion //User Code
         }
         #endregion // Declaration Management Callbacks
@@ -133,7 +133,7 @@ namespace JSSimge
                     attributes.Add(Som.CarOC.heading_direction);
                     attributes.Add(Som.CarOC.speed);
                     attributes.Add(Som.CarOC.position);
-                    RequestAttributeValueUpdate(newCar, attributes);
+                    if (!RequestAttributeValueUpdate(newCar, attributes, "")) Report("Request for update NOT sent", ConsoleColor.Red);
                 }
 
 
@@ -153,9 +153,11 @@ namespace JSSimge
                     attributes.Add(Som.TLightOC.duration_green);
                     attributes.Add(Som.TLightOC.duration_red);
                     attributes.Add(Som.TLightOC.belong_area);
-                    RequestAttributeValueUpdate(newTLight, attributes);
+                    if (!RequestAttributeValueUpdate(newTLight, attributes, "")) Report("Request for update NOT sent", ConsoleColor.Red);
 
-                }
+            }
+
+            Program.printStatus();
                 #endregion //User Code
             }
 
@@ -171,21 +173,7 @@ namespace JSSimge
                 // !!! If this federate is created only one object instance, then it is sufficient to check the handle of that object, otherwise we need to check all the collection
                 if (data.ObjectInstance.Handle == manager.CarObjects[0].Handle)
                 {
-                        // We can further try to figure out the attributes for which update is requested.
-                        //foreach (var item in data.ObjectInstance.Attributes)
-                        //{
-                        //  if (item.Handle == Som.ShipOC.Callsign.Handle) UpdateName(manager.Ships[0]);
-                        //  else if (item.Handle == Som.ShipOC.Heading.Handle) UpdateHeading(manager.Ships[0]);
-                        //  else if (item.Handle == Som.ShipOC.Position.Handle) UpdatePosition(manager.Ships[0]);
-                        //  else if (item.Handle == Som.ShipOC.Speed.Handle) UpdateSpeed(manager.Ships[0]);
-                        //}
-
-                        // We can update all attributes if we dont want to check every attribute.
                         UpdateAll(manager.CarObjects[0]);
-                        //UpdateName(manager.Ships[0]);
-                        //UpdatePosition(manager.Ships[0]);
-                        //UpdateHeading(manager.Ships[0]);
-                        //UpdateSpeed(manager.Ships[0]);
                 }
                 #endregion //User Code
             }
@@ -220,7 +208,7 @@ namespace JSSimge
                             item.car.position = data.GetAttributeValue<Coordinate>(Som.CarOC.position);
                             
                         // report to the user
-                        Report($"Foreign Car updated car_id:{item.car.car_id} area:{item.car.belong_area} position:({item.car.position.X},{item.car.position.Y})" + Environment.NewLine);
+                        Report($"Foreign Car updated car_id:{item.car.car_id} area:{item.car.belong_area} position:({item.car.position.X},{item.car.position.Y})", ConsoleColor.Blue);
 
                     }
                 }
@@ -241,7 +229,7 @@ namespace JSSimge
                         if (data.IsValueUpdated(Som.TLightOC.belong_area))
                             item.tlight.belong_area = (Area)data.GetAttributeValue<uint>(Som.TLightOC.belong_area);
                         // report to the user
-                        Report($"Foreign TLight update tlight_id{item.tlight.tlight_id} area:{item.tlight.belong_area} state:{item.tlight.state}");
+                        Report($"Foreign TLight update tlight_id{item.tlight.tlight_id} area:{item.tlight.belong_area} state:{item.tlight.state}", ConsoleColor.Blue);
                     }
                 }
                 #endregion //User Code
@@ -268,7 +256,7 @@ namespace JSSimge
                     if (data.ObjectInstance.Handle == car.Handle)// Find the Object
                     {
                         manager.CarObjects.Remove(car);
-                        Report($"Ship: {car.car.car_id} left. Number of Ships Now: {manager.CarObjects.Count}" + Environment.NewLine);
+                        Report($"Ship: {car.car.car_id} left. Number of Ships Now: {manager.CarObjects.Count}", ConsoleColor.Blue);
                     }
                 }
                 #endregion //User Code
@@ -319,13 +307,13 @@ namespace JSSimge
                 // Get parameter values
                 // 1st Method
                 // Check which parameter is updated
-                if (data.IsValueUpdated(Som.TLightMIC.tlight_id))
+                //if (data.IsValueUpdated(Som.TLightMIC.tlight_id)) TODO
                     tlight_id = data.GetParameterValue<string>(Som.TLightMIC.tlight_id);
 
-                if (data.IsValueUpdated(Som.TLightMIC.area))
+                //if (data.IsValueUpdated(Som.TLightMIC.area))
                     belong_area = (Area)data.GetParameterValue<uint>(Som.TLightMIC.area);
 
-                if (data.IsValueUpdated(Som.TLightMIC.state))
+                //if (data.IsValueUpdated(Som.TLightMIC.state))
                     state = (TLState)data.GetParameterValue<uint>(Som.TLightMIC.state);
 
                 Report($"recieve data {tlight_id}, {belong_area}, {state}", ConsoleColor.Blue);
@@ -455,7 +443,7 @@ namespace JSSimge
 
             // Add Values
             car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
-            UpdateAttributeValues(car);
+            if (!UpdateAttributeValues(car, "")) Report("Updates Car Position not successfull", ConsoleColor.Red);
         }
 
         // Update attribute values
@@ -469,11 +457,11 @@ namespace JSSimge
             car.AddAttributeValue(Som.CarOC.heading_direction, (uint)car.car.heading_direction);
             car.AddAttributeValue(Som.CarOC.speed, (uint)car.car.speed);
             car.AddAttributeValue<Coordinate>(Som.CarOC.position, car.car.position);
-            UpdateAttributeValues(car);
+            if (!UpdateAttributeValues(car, "")) Report("Updates Car ALL not successfull", ConsoleColor.Red);
         }
 
 
-        public void askForUpdateTLight(CTLightHlaObject tlight)
+        public void requestForUpdateTLight(CTLightHlaObject tlight)
         {
             Report("asked for update", ConsoleColor.Gray);
             // (3) Request Update Values for specific attributes only (in here all)
@@ -483,7 +471,7 @@ namespace JSSimge
             attributes.Add(Som.TLightOC.duration_green);
             attributes.Add(Som.TLightOC.duration_red);
             attributes.Add(Som.TLightOC.belong_area);
-            RequestAttributeValueUpdate(tlight, attributes);
+            if(!RequestAttributeValueUpdate(tlight, attributes, "")) Report("request for update not sucessfull (requestForUpdateTLight)", ConsoleColor.Red);
         }
 
 

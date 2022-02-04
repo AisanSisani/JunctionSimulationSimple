@@ -201,8 +201,8 @@ namespace JSSimge
 
             tlight.tlight_id = "first_tlight";
             tlight.state = TLState.red;
-            tlight.duration_green = 2000;
-            tlight.duration_red = 3000;
+            tlight.duration_green = 10000;
+            tlight.duration_red = 10000;
             tlight.belong_area = Area.north_down;
 
             // Encapsulate own tlight

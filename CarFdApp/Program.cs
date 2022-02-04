@@ -82,9 +82,9 @@ namespace JSSimge
 
                 // Move our local ship
                 car.Move(GetTimeStep());
-                Report($"position: ({car.position.X},{car.position.Y})", ConsoleColor.Green);
+                //Report($"position: ({car.position.X},{car.position.Y})", ConsoleColor.Green);
                 // send the updates
-                manager.federate.SendMessage(car.car_id, car.belong_area, car.position); 
+                //manager.federate.SendMessage(car.car_id, car.belong_area, car.position); 
 
             } while (!Terminate && !car.Exit);
 
