@@ -42,7 +42,7 @@ namespace JSSimge
         public CSimulationManager()
         {
             // Hook up the Elapsed event for the timer. 
-            timer.Elapsed += TimerElapsed;
+            //timer.Elapsed += TimerElapsed;
 
             // Initialize the application-specific federate
             federate = new CCarFdApp(this);
@@ -70,6 +70,7 @@ namespace JSSimge
             switch (federate.RTILibrary)
             {
             case RTILibraryType.HLA13_DMSO: case RTILibraryType.HLA13_Portico: case RTILibraryType.HLA13_OpenRti:
+                    Console.WriteLine("Used RTILibraryType.HLA13_Portico or RTILibraryType.HLA13_OpenRti");
                     federate.Som.CarOC.Name = "objectRoot.Car";
                     federate.Som.CarOC.PrivilegeToDelete.Name = "privilegeToDelete";
                     federate.Som.TLightOC.Name = "objectRoot.TLight";
@@ -80,6 +81,7 @@ namespace JSSimge
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\CarFdApp\Som\JSFom.fed";
                     break;
             case RTILibraryType.HLA1516e_Portico: case RTILibraryType.HLA1516e_OpenRti:
+                    Console.WriteLine("RTILibraryType.HLA1516e_OpenRti");
                     federate.Som.CarOC.Name = "HLAobjectRoot.Car";
                     federate.Som.CarOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
                     federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
@@ -92,6 +94,7 @@ namespace JSSimge
             }
         }
 
+        /*
         // Update Car Position TODO: create the timer and all the shit TIMER
         private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
@@ -110,6 +113,7 @@ namespace JSSimge
             // Force a garbage collection to occur.
             GC.Collect();
         }
+        */
 
    
 

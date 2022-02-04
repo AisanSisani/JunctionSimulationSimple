@@ -275,7 +275,7 @@ namespace JSSimge
             }
             else
             {
-                Program.Report($"--- Not Empty Position", ConsoleColor.Green);
+                //Program.Report($"--- Not Empty Position", ConsoleColor.Green);
                 return;
             }
         }
@@ -340,7 +340,7 @@ namespace JSSimge
                 if (item.tlight.belong_area == area)
                 {
                    
-                    manager.federate.askForUpdateTLight(item);
+                    //manager.federate.askForUpdateTLight(item);
 
                     if (item.tlight.state == TLState.red)
                         return false;

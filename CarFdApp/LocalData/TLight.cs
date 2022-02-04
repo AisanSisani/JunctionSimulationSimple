@@ -24,7 +24,7 @@ namespace JSSimge
         public CTLight()
         {
             tlight_id = "north_down";
-            state = TLState.red;
+            state = TLState.green;
             duration_red = 0;
             duration_green = 0;
             belong_area = Area.north_down;

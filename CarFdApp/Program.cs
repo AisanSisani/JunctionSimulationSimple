@@ -75,13 +75,16 @@ namespace JSSimge
             do
             {
                 //Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
-                printStatus();
+                //printStatus();
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
 
                 // Move our local ship
-                car.Move(GetTimeStep());
+                //car.Move(GetTimeStep());
+                //Report($"position: ({car.position.X},{car.position.Y})", ConsoleColor.Green);
+                // send the updates
+                //manager.federate.SendMessage(car.car_id, car.belong_area, car.position); 
 
             } while (!Terminate && !car.Exit);
 
@@ -226,7 +229,7 @@ namespace JSSimge
         }
 
         // Print status TODO: fill them with more data, also check where it is called
-        private static void printStatus()
+        public static void printStatus()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("*************** Status ***************");

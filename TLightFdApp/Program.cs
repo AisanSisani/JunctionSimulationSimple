@@ -68,12 +68,12 @@ namespace JSSimge
             // FM Test
             manager.federate.ListFederationExecutions();
 
-            
+
 
             // *************************************************
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
-
+            Boolean result3;
             do
             {
                 // process rti events (callbacks) and tick
@@ -87,6 +87,9 @@ namespace JSSimge
                     Thread.Sleep((int)tlight.duration_red);
                     Report("Change state to green", ConsoleColor.Green);
                     tlight.state = TLState.green;
+                    result3 = manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state);
+                    if (!result3)
+                        Report("NOT sent", ConsoleColor.Red);
                 }
                 else
                 {
@@ -94,6 +97,9 @@ namespace JSSimge
                     Thread.Sleep((int)tlight.duration_green);
                     Report("Change state to red", ConsoleColor.Green);
                     tlight.state = TLState.red;
+                    result3 = manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state);
+                    if (!result3)
+                        Report("NOT sent", ConsoleColor.Red);
                 }
             } while (!Terminate);
 
@@ -119,7 +125,7 @@ namespace JSSimge
 
             // Finalize Federation Execution
             // Remove objects
-            manager.timer.Stop(); // stop reporting the ship position
+            //manager.timer.Stop(); // stop reporting the ship position
             manager.federate.DeleteObjectInstance(manager.TLightObject);
 
             // Leave and destroy federation execution

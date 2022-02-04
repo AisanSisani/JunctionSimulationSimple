@@ -44,7 +44,7 @@ namespace JSSimge.Som
       
       // Create Attributes
       // tlight_id
-      tlight_id = new HlaAttribute("tlight_id", PSKind.PublishSubscribe);
+      tlight_id = new HlaAttribute("tlight_id", PSKind.Subscribe);
       Attributes.Add(tlight_id);
       // state
       state = new HlaAttribute("state", PSKind.Subscribe);

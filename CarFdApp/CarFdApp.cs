@@ -94,11 +94,22 @@ namespace JSSimge
                 manager.timer.Stop(); // move this to turn off attribute update callback
                 #endregion //User Code
             }
+
+        // FdAmb_TurnInteractionsOnAdvisedHandler -> not used
+        public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TurnInteractionsOnAdvisedHandler(sender, data);
+
+            #region User Code
+            //throw new NotImplementedException("FdAmb_TurnInteractionsOnAdvisedHandler");
+            #endregion //User Code
+        }
         #endregion // Declaration Management Callbacks
 
         #region Object Management Callbacks
-            // RTI has discovered objects you may like
-            public override void FdAmb_ObjectDiscoveredHandler(object sender, HlaObjectEventArgs data)
+        // RTI has discovered objects you may like
+        public override void FdAmb_ObjectDiscoveredHandler(object sender, HlaObjectEventArgs data)
             {
                 // Call the base class handler
                 base.FdAmb_ObjectDiscoveredHandler(sender, data);
@@ -295,11 +306,9 @@ namespace JSSimge
             // Call the base class handler
             base.FdAmb_InteractionReceivedHandler(sender, data);
 
-            Report("recieve message", ConsoleColor.Blue);
-
             // User code
             // Which interaction class?
-            Report($"Interaction recieve {data.Interaction.GetType()}", ConsoleColor.Blue);
+            Report($"recieve message {data.Interaction.GetType()}", ConsoleColor.Blue);
 
             if (data.Interaction.ClassHandle == Som.TLightMIC.Handle)
             {
@@ -319,7 +328,7 @@ namespace JSSimge
                 if (data.IsValueUpdated(Som.TLightMIC.state))
                     state = (TLState)data.GetParameterValue<uint>(Som.TLightMIC.state);
 
-
+                Report($"recieve data {tlight_id}, {belong_area}, {state}", ConsoleColor.Blue);
                 // 2nd method
                 //foreach (var item in data.Interaction.Parameters)
                 //{
@@ -333,6 +342,7 @@ namespace JSSimge
                     if (tlight_id == item.tlight.tlight_id)
                     {
                         item.tlight.state = state;
+                        Report($"light updated", ConsoleColor.Blue);
                     }
                 }
 
@@ -354,7 +364,7 @@ namespace JSSimge
 
                 if (data.IsValueUpdated(Som.CarMIC.position))
                     position = data.GetParameterValue<Coordinate>(Som.CarMIC.position);
-
+                Report($"recieve data {car_id}, ({belong_area}, {position.X},{position.Y})", ConsoleColor.Blue);
 
                 // 2nd method
                 //foreach (var item in data.Interaction.Parameters)
@@ -369,9 +379,14 @@ namespace JSSimge
                     if (car_id == item.car.car_id)
                     {
                         item.car.position = position;
+                        item.car.belong_area = belong_area;
+                        item.car.heading_direction = item.car.updateDirectionBasedOnArea(belong_area);
+                        Report($"car updated", ConsoleColor.Blue);
                     }
                 }
             }
+
+            Program.printStatus();
         }
 
         #endregion // Object Management Callbacks
@@ -475,14 +490,14 @@ namespace JSSimge
         // Send CarMIC.Message
         public bool SendMessage(string car_id, Area area, Coordinate position)
         {
-            Report("send message", ConsoleColor.Blue);
+            Report($"send message {car_id}, {area}, ({position.X},{position.Y})", ConsoleColor.Blue);
             Racon.RtiLayer.HlaInteraction interaction = new Racon.RtiLayer.HlaInteraction(Som.CarMIC);
 
 
             // Add Values
             interaction.AddParameterValue(Som.CarMIC.car_id, car_id); // String
-            interaction.AddParameterValue<Area>(Som.CarMIC.area, area);
-            interaction.AddParameterValue(Som.CarMIC.position, position); 
+            interaction.AddParameterValue(Som.CarMIC.area, (uint)area);
+            interaction.AddParameterValue<Coordinate>(Som.CarMIC.position, position); 
             
             // Send interaction
             return (SendInteraction(interaction));

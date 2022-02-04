@@ -211,16 +211,7 @@ namespace JSSimge
               #endregion //User Code
             }
 
-            // FdAmb_TurnInteractionsOnAdvisedHandler -> not used
-            public override void FdAmb_TurnInteractionsOnAdvisedHandler(object sender, HlaDeclarationManagementEventArgs data)
-            {
-              // Call the base class handler
-              base.FdAmb_TurnInteractionsOnAdvisedHandler(sender, data);
-      
-              #region User Code
-              throw new NotImplementedException("FdAmb_TurnInteractionsOnAdvisedHandler");
-              #endregion //User Code
-            }
+            
         #endregion //Declaration Management Callbacks
         
         

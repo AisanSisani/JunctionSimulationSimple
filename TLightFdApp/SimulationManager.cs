@@ -41,7 +41,7 @@ namespace JSSimge
     public CSimulationManager()
     {
             // Hook up the Elapsed event for the timer. 
-            timer.Elapsed += TimerElapsed;
+            //timer.Elapsed += TimerElapsed;
 
             // Initialize the application-specific federate
             federate = new CTLightFdApp(this);
@@ -65,6 +65,7 @@ namespace JSSimge
       switch (federate.RTILibrary)
       {
         case RTILibraryType.HLA13_DMSO: case RTILibraryType.HLA13_Portico: case RTILibraryType.HLA13_OpenRti:
+                    Console.WriteLine("Used RTILibraryType.HLA13_Portico or RTILibraryType.HLA13_OpenRti");
                     federate.Som.TLightOC.Name = "objectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "privilegeToDelete";
                     federate.Som.TLightMIC.Name = "interactionRoot.TLightM";
@@ -72,6 +73,7 @@ namespace JSSimge
                     federate.FederationExecution.FDD = @"C:\Users\aisan\aisan_space\aisan_work\projects\JunctionSimulationSimple\JunctionSimulationVS\JunctionSimulationSimple\TLightFdApp\Som\JSFom.fed";
                 break;
         case RTILibraryType.HLA1516e_Portico: case RTILibraryType.HLA1516e_OpenRti:
+                    Console.WriteLine("Used RTILibraryType.HLA1516e_OpenRti");
                     federate.Som.TLightOC.Name = "HLAobjectRoot.TLight";
                     federate.Som.TLightOC.PrivilegeToDelete.Name = "HLAprivilegeToDeleteObject";
                     federate.Som.TLightMIC.Name = "HLAinteractionRoot.TLightM";
@@ -81,6 +83,7 @@ namespace JSSimge
       }
     }
 
+        /*
     // Update Car Position TODO: create the timer and all the shit TIMER
     private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
@@ -100,7 +103,7 @@ namespace JSSimge
             GC.Collect();
     }
 
-   
+   */
     // report
     private void Report(string txt, ConsoleColor color)
     {
