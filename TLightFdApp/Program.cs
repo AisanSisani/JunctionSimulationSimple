@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic; // for List
 using System.Threading;
+using System.ComponentModel;
+using System.Timers;
 // Racon
 using Racon;
 using Racon.RtiLayer;
@@ -20,10 +22,11 @@ namespace JSSimge
         // Local object
         static CTLight tlight = new CTLight();
         static bool Terminate = false; // exit switch for app
+        static System.Timers.Timer timerState = new System.Timers.Timer(); // timer for the lights to switch
 
         // Communication layer related structures
         ///static public CTLightFdApp federate; //Application-specific federate 
-       
+
         // Main Entrance for Application
         static void Main(string[] args)
         {
@@ -73,36 +76,17 @@ namespace JSSimge
             // *************************************************
             // Main Simulation Loop - loops until ESC is pressed
             // *************************************************
-            Boolean result3;
+            timerState.Interval = tlight.duration_red;
+            timerState.Elapsed += TimerElapsed;
+            timerState.Start();
             do
             {
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
 
-                if (tlight.state == TLState.red)
-                {
-
-                    Report($"State is red. Sleep for {(int)tlight.duration_red} ms.", ConsoleColor.Green);
-                    Thread.Sleep((int)tlight.duration_red);
-                    Report("Change state to green", ConsoleColor.Green);
-                    tlight.state = TLState.green;
-                    result3 = manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state);
-                    if (!result3)
-                        Report("NOT sent", ConsoleColor.Red);
-                }
-                else
-                {
-                    Report($"State is green. Sleep for {(int)tlight.duration_green} ms.", ConsoleColor.Green);
-                    Thread.Sleep((int)tlight.duration_green);
-                    Report("Change state to red", ConsoleColor.Green);
-                    tlight.state = TLState.red;
-                    result3 = manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state);
-                    if (!result3)
-                        Report("NOT sent", ConsoleColor.Red);
-                }
             } while (!Terminate);
-
+            timerState.Stop();
             // TM Tests
             /*
             manager.federate.DisableAsynchronousDelivery();
@@ -237,5 +221,26 @@ namespace JSSimge
             Console.WriteLine(txt);
         }
 
+
+        private static void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+
+            if (tlight.state == TLState.red)
+            {
+
+                Report("Change state to green", ConsoleColor.Green);
+                tlight.state = TLState.green;
+                if(!manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state))
+                    Report("message NOT sent", ConsoleColor.Red);
+            }
+            else
+            {
+                Report("Change state to red", ConsoleColor.Green);
+                tlight.state = TLState.red;
+                if (!manager.federate.SendMessage(tlight.tlight_id, tlight.belong_area, tlight.state))
+                    Report("message NOT sent", ConsoleColor.Red);
+            }
+            GC.Collect();
+        }
     }
 }
