@@ -29,7 +29,7 @@ namespace JSSimge
         public CCar()
         {
             // Instantiate local data here
-            car_id = "1001";
+            car_id = "default_id";
             belong_area = Area.north_down;
             heading_direction = Direction.north;
             speed = Pace.medium;

@@ -500,7 +500,7 @@ namespace JSSimge
             interaction.AddParameterValue<Coordinate>(Som.CarMIC.position, position); 
             
             // Send interaction
-            return (SendInteraction(interaction));
+            return (SendInteraction(interaction, ""));
         }
 
 

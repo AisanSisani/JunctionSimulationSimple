@@ -47,9 +47,9 @@ namespace JSSimge.Som
       // tlight_id
       tlight_id = new HlaParameter("tlight_id");
       Parameters.Add(tlight_id);
-            // state
-            state = new HlaParameter("state");
-            Parameters.Add(state);
+        // state
+        state = new HlaParameter("state");
+        Parameters.Add(state);
         }
     #endregion //Constructor
   }
