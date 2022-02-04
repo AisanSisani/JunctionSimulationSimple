@@ -51,7 +51,7 @@ namespace JSSimge
             federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
 
             // Time management TIMER
-            federate.Lookahead = 1;
+            //federate.Lookahead = 1;
 
             // Handle RTI type variation
             initialize();
@@ -82,7 +82,7 @@ namespace JSSimge
     // Update Car Position TODO: create the timer and all the shit TIMER
     private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
-            Report("TimerElapsed", ConsoleColor.Blue);
+            //Report("TimerElapsed", ConsoleColor.Blue);
             // Update all the attributes of the car
             federate.UpdateAll(TLightObject);
             Console.ForegroundColor = ConsoleColor.White;

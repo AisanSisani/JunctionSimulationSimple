@@ -60,8 +60,10 @@ namespace JSSimge
 
             // Initialize themes TODO
             // TM Initialization
+            /*
             manager.federate.EnableAsynchronousDelivery();
             manager.federate.EnableTimeConstrained();
+            */
 
             // FM Test
             manager.federate.ListFederationExecutions();
@@ -96,6 +98,7 @@ namespace JSSimge
             } while (!Terminate);
 
             // TM Tests
+            /*
             manager.federate.DisableAsynchronousDelivery();
             manager.federate.DisableTimeConstrained();
             manager.federate.QueryLogicalTime();
@@ -106,6 +109,7 @@ namespace JSSimge
             double lits;
             bool res4 = manager.federate.QueryLITS(out lits);
             bool res3 = manager.federate.QueryLITS();
+            */
 
             // *************************************************
             // Shutdown

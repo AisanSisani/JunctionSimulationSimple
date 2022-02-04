@@ -187,7 +187,7 @@ namespace JSSimge
 
                 #region User Code
 
-                Report("FdAmb_ObjectAttributesReflectedHandler", ConsoleColor.Blue);
+                Report("FdAmb_ObjectAttributesReflectedHandler------------------------------------------", ConsoleColor.Blue);
                 foreach (var item in manager.CarObjects)
                 {
                     if (data.ObjectInstance.Handle == item.Handle)
@@ -263,65 +263,91 @@ namespace JSSimge
                 #endregion //User Code
             }
 
+        public override void FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(sender, data);
+
+            #region User Code
+            Report("Turn Updates On", ConsoleColor.Blue);
+            // Start to update the position periodically TIMER
+            manager.timer.Start(); // OpenRti does not support this callback
+            #endregion //User Code
+        }
+
+        // -> idk
+        public override void FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(object sender, HlaObjectEventArgs data)
+        {
+            // Call the base class handler
+            base.FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(sender, data);
+
+            #region User Code
+            Report("Turn Updates off", ConsoleColor.Blue);
+
+            // Stop to update the position TIMER
+            manager.timer.Stop();
+            #endregion //User Code
+        }
+
         #endregion // Object Management Callbacks
 
+        /*
+                #region Time Management Callbacks
+                // FdAmb_TimeRegulationEnabled
+                public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
+                {
+                    // Call the base class handler
+                    base.FdAmb_TimeRegulationEnabled(sender, data);
 
-        #region Time Management Callbacks
-        // FdAmb_TimeRegulationEnabled
-        public override void FdAmb_TimeRegulationEnabled(object sender, HlaTimeManagementEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_TimeRegulationEnabled(sender, data);
+                    #region User Code
+                    Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
+                    Time = data.Time; //  Current logical time of the joined federate set by RTI
+                    Report("Logical time set by RTI TR: " + Time);
+                    #endregion //User Code
+                }
 
-            #region User Code
-            Report("FdAmb_TimeRegulationEnabled", ConsoleColor.Blue);
-            Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI TR: " + Time);
-            #endregion //User Code
-        }
+                // FdAmb_TimeConstrainedEnabled
+                public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
+                {
+                    // Call the base class handler
+                    base.FdAmb_TimeConstrainedEnabled(sender, data);
 
-        // FdAmb_TimeConstrainedEnabled
-        public override void FdAmb_TimeConstrainedEnabled(object sender, HlaTimeManagementEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_TimeConstrainedEnabled(sender, data);
+                    #region User Code
+                    Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
 
-            #region User Code
-            Report("FdAmb_TimeConstrainedEnabled", ConsoleColor.Blue);
+                    Time = data.Time; //  Current logical time of the joined federate set by RTI
+                    Report("Logical time set by RTI TC: " + Time);
+                    #endregion //User Code
+                }
 
-            Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI TC: " + Time);
-            #endregion //User Code
-        }
+                // FdAmb_TimeAdvanceGrant
+                public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
+                {
+                    // Call the base class handler
+                    base.FdAmb_TimeAdvanceGrant(sender, data);
 
-        // FdAmb_TimeAdvanceGrant
-        public override void FdAmb_TimeAdvanceGrant(object sender, HlaTimeManagementEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_TimeAdvanceGrant(sender, data);
+                    #region User Code
+                    Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
 
-            #region User Code
-            Report("FdAmb_TimeAdvanceGrant", ConsoleColor.Blue);
+                    Time = data.Time; //  Current logical time of the joined federate set by RTI
+                    Report("Logical time set by RTI: " + Time);
+                    #endregion //User Code
+                }
+                // FdAmb_RequestRetraction
+                public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
+                {
+                    // Call the base class handler
+                    base.FdAmb_RequestRetraction(sender, data);
 
-            Time = data.Time; //  Current logical time of the joined federate set by RTI
-            Report("Logical time set by RTI: " + Time);
-            #endregion //User Code
-        }
-        // FdAmb_RequestRetraction
-        public override void FdAmb_RequestRetraction(object sender, HlaTimeManagementEventArgs data)
-        {
-            // Call the base class handler
-            base.FdAmb_RequestRetraction(sender, data);
+                    #region User Code
+                    Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
 
-            #region User Code
-            Report("FdAmb_RequestRetraction", ConsoleColor.Blue);
+                    throw new NotImplementedException("FdAmb_RequestRetraction");
+                    #endregion //User Code
+                }
+                #endregion //Time Management Callbacks
 
-            throw new NotImplementedException("FdAmb_RequestRetraction");
-            #endregion //User Code
-        }
-        #endregion //Time Management Callbacks
-
-
+        */
         //update the car position based on the timer, it is called in the simulation manager
         public void UpdatePosition(CCarHlaObject car)
         {

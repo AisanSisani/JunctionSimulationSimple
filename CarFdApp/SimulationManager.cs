@@ -52,7 +52,7 @@ namespace JSSimge
             federate.FederationExecution.ConnectionSettings = "rti://127.0.0.1";
 
             // Time management TIMER
-            federate.Lookahead = 1;
+            //federate.Lookahead = 1;
 
             // Handle RTI type variation
             initialize();

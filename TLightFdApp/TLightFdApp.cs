@@ -137,6 +137,7 @@ namespace JSSimge
             base.FdAmb_TurnUpdatesOnForObjectInstanceAdvisedHandler(sender, data);
 
             #region User Code
+            Report("Turn Updates On", ConsoleColor.Blue);
             // Start to update the position periodically TIMER
             manager.timer.Start(); // OpenRti does not support this callback
             #endregion //User Code
@@ -149,13 +150,15 @@ namespace JSSimge
             base.FdAmb_TurnUpdatesOffForObjectInstanceAdvisedHandler(sender, data);
 
             #region User Code
+            Report("Turn Updates off", ConsoleColor.Blue);
+
             // Stop to update the position TIMER
             manager.timer.Stop();
             #endregion //User Code
         }
 
         #endregion // Object Management Callbacks
-
+/*
 
         #region Time Management Callbacks
         // FdAmb_TimeRegulationEnabled
@@ -213,7 +216,7 @@ namespace JSSimge
         }
         #endregion //Time Management Callbacks
 
-
+*/
         //update the car position based on the timer, it is called in the simulation manager
         public void UpdateState(CTLightHlaObject tlight)
         {

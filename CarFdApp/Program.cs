@@ -75,7 +75,7 @@ namespace JSSimge
             do
             {
                 //Report($"Simulation Iteration {iteration++}", ConsoleColor.Cyan);
-                //printStatus();
+                printStatus();
                 // process rti events (callbacks) and tick
                 if (manager.federate.FederateState.HasFlag(Racon.FederateStates.JOINED))
                     manager.federate.Run();
